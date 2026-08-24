@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Panel de administración · Anushka Aromas</title>
+<style>
+:root{--bg:#f4f1ec;--card:#fff;--ink:#33302c;--muted:#8a8178;--accent:#7c6a58;--line:#e5ded4;--sage:#6f8a5f;--red:#c0392b;--wa:#25d366;}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--accent);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:20}
+header h1{font-size:18px;margin:0;font-weight:700}
+header .sub{font-size:12px;opacity:.85}
+.bar{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:sticky;top:52px;z-index:19}
+.bar input,.bar select{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff}
+#q{flex:1;min-width:180px}
+.btn{border:none;border-radius:8px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer}
+.btn.pub{background:var(--sage);color:#fff}
+.btn.pub:hover{background:#5e7650}
+.btn.pub:disabled{background:#bcc7b4;cursor:default}
+.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--accent)}
+.wrap{max-width:1100px;margin:0 auto;padding:16px 20px 120px}
+.hint{background:#fff8ec;border:1px solid #f0e2c4;color:#7a6636;padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:14px;line-height:1.5}
+.dirty{background:#fff3f0;border-color:#f3c9bf;color:#8a4636}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05)}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13.5px;vertical-align:middle}
+th{background:#faf7f2;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:104px;z-index:5}
+.athumb{width:46px;height:46px;border-radius:7px;background:#fff;background-repeat:no-repeat}
+.pname{font-weight:600}
+.pcat{font-size:11.5px;color:var(--muted)}
+.priceInput{width:110px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:14px;text-align:right}
+.priceInput.changed{border-color:var(--sage);background:#f2f7ee}
+.tgl{display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12.5px;user-select:none}
+.sw{width:38px;height:22px;border-radius:20px;background:#ccc;position:relative;transition:.15s;flex:none}
+.sw::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:.15s}
+.tgl.on .sw{background:var(--sage)}
+.tgl.on .sw::after{left:18px}
+.tgl.on.red .sw{background:var(--red)}
+tr.hidden-row{opacity:.5}
+.savebar{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -3px 14px rgba(0,0,0,.07);z-index:30;flex-wrap:wrap;gap:10px}
+.savebar .status{font-size:13px;color:var(--muted)}
+.savebar .status b{color:var(--red)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal.open{display:flex}
+.modal .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:24px;max-height:90vh;overflow:auto}
+.modal h2{margin:0 0 6px;font-size:19px}
+.modal ol{font-size:13.5px;line-height:1.7;padding-left:20px}
+.modal input{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font-size:14px;margin:10px 0}
+.modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+code{background:#f2efe9;padding:1px 6px;border-radius:5px;font-size:12.5px}
+a{color:var(--accent)}
+.toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);background:#33302c;color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;z-index:60;opacity:0;transition:.2s;pointer-events:none}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<header>
+  <div><h1>Anushka Aromas · Administración</h1><div class="sub">Cambiá precios y stock. Cuando termines, tocá Publicar.</div></div>
+  <button class="btn ghost" id="cfgBtn">⚙ Conexión</button>
+</header>
+<div class="bar">
+  <input id="q" type="search" placeholder="🔍 Buscar producto...">
+  <select id="catFilter"><option value="">Todas las categorías</option></select>
+  <select id="stockFilter"><option value="">Todos</option><option value="in">En stock</option><option value="out">Sin stock</option><option value="hidden">Ocultos</option></select>
+</div>
+<div class="wrap">
+  <div class="hint" id="hint">Editá el <b>precio</b> escribiendo el número, y usá los interruptores de <b>Stock</b> (en stock / sin stock) y <b>Mostrar</b> (visible en el catálogo). Los cambios no se aplican hasta que tocás <b>Publicar cambios</b>.</div>
+  <table>
+    <thead><tr><th>Foto</th><th>Producto</th><th style="text-align:right">Precio</th><th>Stock</th><th>Mostrar</th></tr></thead>
+    <tbody id="rows"><tr><td colspan="5" style="padding:40px;text-align:center;color:#999">Cargando…</td></tr></tbody>
+  </table>
+</div>
+<div class="savebar">
+  <div class="status" id="status">Sin cambios.</div>
+  <div style="display:flex;gap:10px">
+    <button class="btn ghost" id="backupBtn">⬇ Descargar copia</button>
+    <button class="btn pub" id="pubBtn" disabled>Publicar cambios</button>
+  </div>
+</div>
+
+<div class="modal" id="cfg">
+  <div class="box">
+    <h2>Conectar con GitHub</h2>
+    <p style="font-size:13.5px;color:#666;margin-top:4px">Para que "Publicar" actualice el catálogo online, necesitás un <b>token de acceso</b> de GitHub (se guarda solo en este navegador, en esta compu). Se hace una sola vez.</p>
+    <ol>
+      <li>Entrá a <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> (Fine-grained tokens) → <b>Generate new token</b>.</li>
+      <li>En <b>Repository access</b> elegí <b>Only select repositories</b> → <code>anushka-aromas</code>.</li>
+      <li>En <b>Permissions → Repository → Contents</b>, poné <b>Read and write</b>.</li>
+      <li>Generá el token, copialo y pegalo acá abajo.</li>
+    </ol>
+    <input id="tokenInput" type="password" placeholder="Pegá tu token (empieza con github_pat_...)" autocomplete="off">
+    <div class="row">
+      <button class="btn ghost" id="cfgClear">Borrar token</button>
+      <button class="btn ghost" id="cfgClose">Cerrar</button>
+      <button class="btn pub" id="cfgSave">Guardar</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const OWNER="lucasbarranco-blip", REPO="anushka-aromas", FILE="data.json", BRANCH="main";
+let DATA=null, PRODUCTS=[], dirty=new Set(), fileSha=null;
+
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+function fmtInt(n){return Number(n).toLocaleString('es-AR');}
+function sprite(ix){const M=DATA.meta.sprite;const s=Math.floor(ix/M.per),li=ix%M.per,c=li%M.cols,r=Math.floor(li/M.cols);return "background-image:url('sprite_"+s+".jpg');background-size:"+(M.cols*100)+"% "+(M.rows*100)+"%;background-position:"+(c/(M.cols-1)*100).toFixed(4)+"% "+(r/(M.rows-1)*100).toFixed(4)+"%";}
+function tokenGet(){try{return localStorage.getItem('gh_token')||'';}catch(e){return '';}}
+
+fetch('data.json?v='+Date.now()).then(r=>r.json()).then(d=>{DATA=d;PRODUCTS=d.products;buildCatFilter();render();}).catch(e=>{document.getElementById('rows').innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#b23b3b">No se pudo cargar data.json</td></tr>';});
+
+function buildCatFilter(){
+  const sel=document.getElementById('catFilter');
+  const tops=DATA.meta.topsOrder||[...new Set(PRODUCTS.map(p=>p.top))];
+  tops.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+}
+function markDirty(id){dirty.add(id);updateStatus();}
+function updateStatus(){
+  const n=dirty.size;const s=document.getElementById('status');const b=document.getElementById('pubBtn');
+  const hint=document.getElementById('hint');
+  if(n){s.innerHTML='<b>'+n+' producto'+(n>1?'s':'')+' con cambios sin publicar.</b>';b.disabled=false;hint.classList.add('dirty');}
+  else{s.textContent='Sin cambios.';b.disabled=true;hint.classList.remove('dirty');}
+}
+function passFilter(p){
+  const q=document.getElementById('q').value.toLowerCase().trim();
+  const cf=document.getElementById('catFilter').value;
+  const sf=document.getElementById('stockFilter').value;
+  if(q && !p.n.toLowerCase().includes(q)) return false;
+  if(cf && p.top!==cf) return false;
+  if(sf==='in' && !p.stock) return false;
+  if(sf==='out' && p.stock) return false;
+  if(sf==='hidden' && p.visible) return false;
+  return true;
+}
+function render(){
+  const tb=document.getElementById('rows');tb.innerHTML='';
+  const list=PRODUCTS.filter(passFilter);
+  if(!list.length){tb.innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#999">Sin resultados</td></tr>';return;}
+  list.forEach(p=>{
+    const tr=document.createElement('tr');if(!p.visible)tr.className='hidden-row';
+    const td=document.createElement('td');
+    tr.innerHTML=
+      '<td><div class="athumb" style="'+sprite(p.ix)+'"></div></td>'+
+      '<td><div class="pname">'+p.n+'</div><div class="pcat">'+p.top+(p.sub?' › '+p.sub:'')+'</div></td>'+
+      '<td style="text-align:right"><input class="priceInput" inputmode="numeric" value="'+p.p+'" data-id="'+p.id+'"></td>'+
+      '<td><span class="tgl'+(p.stock?' on':'')+'" data-stk="'+p.id+'"><span class="sw"></span>'+(p.stock?'En stock':'Sin stock')+'</span></td>'+
+      '<td><span class="tgl'+(p.visible?' on':' red')+'" data-vis="'+p.id+'"><span class="sw"></span>'+(p.visible?'Visible':'Oculto')+'</span></td>';
+    tb.appendChild(tr);
+  });
+  tb.querySelectorAll('.priceInput').forEach(inp=>{
+    inp.addEventListener('input',e=>{
+      const id=+inp.dataset.id;const p=PRODUCTS.find(x=>x.id===id);
+      let v=parseInt(inp.value.replace(/\D/g,''))||0;p.p=v;inp.classList.add('changed');markDirty(id);
+    });
+  });
+  tb.querySelectorAll('[data-stk]').forEach(el=>{
+    el.addEventListener('click',()=>{const id=+el.dataset.stk;const p=PRODUCTS.find(x=>x.id===id);p.stock=p.stock?0:1;markDirty(id);render();});
+  });
+  tb.querySelectorAll('[data-vis]').forEach(el=>{
+    el.addEventListener('click',()=>{const id=+el.dataset.vis;const p=PRODUCTS.find(x=>x.id===id);p.visible=p.visible?0:1;markDirty(id);render();});
+  });
+}
+['q','catFilter','stockFilter'].forEach(id=>document.getElementById(id).addEventListener('input',render));
+
+// backup
+document.getElementById('backupBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify(DATA)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data-backup.json';a.click();
+});
+
+// config modal
+const cfg=document.getElementById('cfg');
+function openCfg(){document.getElementById('tokenInput').value=tokenGet();cfg.classList.add('open');}
+document.getElementById('cfgBtn').addEventListener('click',openCfg);
+document.getElementById('cfgClose').addEventListener('click',()=>cfg.classList.remove('open'));
+document.getElementById('cfgSave').addEventListener('click',()=>{
+  const t=document.getElementById('tokenInput').value.trim();
+  try{localStorage.setItem('gh_token',t);}catch(e){}
+  cfg.classList.remove('open');toast('Token guardado en este navegador');
+});
+document.getElementById('cfgClear').addEventListener('click',()=>{try{localStorage.removeItem('gh_token');}catch(e){}document.getElementById('tokenInput').value='';toast('Token borrado');});
+
+// publish
+document.getElementById('pubBtn').addEventListener('click',publish);
+async function publish(){
+  const token=tokenGet();
+  if(!token){toast('Primero conectá tu token de GitHub');openCfg();return;}
+  const btn=document.getElementById('pubBtn');btn.disabled=true;btn.textContent='Publicando…';
+  try{
+    // get current sha
+    const api='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+FILE;
+    const g=await fetch(api+'?ref='+BRANCH,{headers:{Authorization:'token '+token,Accept:'application/vnd.github+json'}});
+    if(g.status===401){throw new Error('Token inválido o vencido. Revisá la conexión (⚙).');}
+    if(g.status===404){throw new Error('No se encontró data.json en el repo.');}
+    const gj=await g.json();fileSha=gj.sha;
+    // build content
+    const json=JSON.stringify(DATA);
+    const content=btoa(unescape(encodeURIComponent(json)));
+    const put=await fetch(api,{method:'PUT',headers:{Authorization:'token '+token,Accept:'application/vnd.github+json'},
+      body:JSON.stringify({message:'Actualizar precios/stock ('+dirty.size+' cambios)',content:content,sha:fileSha,branch:BRANCH})});
+    if(!put.ok){const pe=await put.json();throw new Error(pe.message||'Error al publicar');}
+    dirty.clear();updateStatus();
+    document.querySelectorAll('.priceInput.changed').forEach(i=>i.classList.remove('changed'));
+    btn.textContent='Publicar cambios';
+    toast('✅ ¡Publicado! El catálogo se actualiza en ~1 minuto.');
+  }catch(e){
+    btn.textContent='Publicar cambios';btn.disabled=false;
+    toast('⚠ '+e.message);
+  }
+}
+</script>
+</body>
+</html>
