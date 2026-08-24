@@ -11,6 +11,7 @@ body{margin:0;font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);c
 header{background:var(--accent);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:20}
 header h1{font-size:18px;margin:0;font-weight:700}
 header .sub{font-size:12px;opacity:.85}
+header .hbtns{display:flex;gap:8px;flex-wrap:wrap}
 .bar{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;position:sticky;top:52px;z-index:19}
 .bar input,.bar select{padding:9px 12px;border:1px solid var(--line);border-radius:8px;font-size:14px;background:#fff}
 #q{flex:1;min-width:180px}
@@ -19,14 +20,18 @@ header .sub{font-size:12px;opacity:.85}
 .btn.pub:hover{background:#5e7650}
 .btn.pub:disabled{background:#bcc7b4;cursor:default}
 .btn.ghost{background:#fff;border:1px solid var(--line);color:var(--accent)}
+.btn.add{background:#fff;border:1px solid #fff;color:var(--accent)}
 .wrap{max-width:1100px;margin:0 auto;padding:16px 20px 120px}
 .hint{background:#fff8ec;border:1px solid #f0e2c4;color:#7a6636;padding:12px 14px;border-radius:10px;font-size:13px;margin-bottom:14px;line-height:1.5}
 .dirty{background:#fff3f0;border-color:#f3c9bf;color:#8a4636}
 table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.05)}
 th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;font-size:13.5px;vertical-align:middle}
 th{background:#faf7f2;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;position:sticky;top:104px;z-index:5}
-.athumb{width:46px;height:46px;border-radius:7px;background:#fff;background-repeat:no-repeat}
+.thumb-wrap{position:relative;width:46px}
+.athumb{width:46px;height:46px;border-radius:7px;background:#fff center/cover no-repeat;cursor:pointer}
+.thumb-wrap .cam{position:absolute;right:-4px;bottom:-4px;background:var(--accent);color:#fff;border-radius:50%;width:19px;height:19px;font-size:11px;display:flex;align-items:center;justify-content:center;pointer-events:none}
 .pname{font-weight:600}
+.pnew{display:inline-block;background:var(--sage);color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle}
 .pcat{font-size:11.5px;color:var(--muted)}
 .priceInput{width:110px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:14px;text-align:right}
 .priceInput.changed{border-color:var(--sage);background:#f2f7ee}
@@ -42,29 +47,35 @@ tr.hidden-row{opacity:.5}
 .savebar .status b{color:var(--red)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:50;padding:16px}
 .modal.open{display:flex}
-.modal .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:24px;max-height:90vh;overflow:auto}
+.modal .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:24px;max-height:92vh;overflow:auto}
 .modal h2{margin:0 0 6px;font-size:19px}
 .modal ol{font-size:13.5px;line-height:1.7;padding-left:20px}
-.modal input{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font-size:14px;margin:10px 0}
-.modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}
+.modal label{display:block;font-size:12.5px;color:var(--muted);margin:12px 0 4px;font-weight:600}
+.modal input,.modal select{width:100%;padding:11px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+.modal .row{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}
+.modal .imgprev{width:90px;height:90px;border-radius:10px;background:#f2efe9 center/cover no-repeat;border:1px dashed var(--line);margin-top:6px}
+.two{display:flex;gap:12px}.two>div{flex:1}
 code{background:#f2efe9;padding:1px 6px;border-radius:5px;font-size:12.5px}
 a{color:var(--accent)}
-.toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);background:#33302c;color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;z-index:60;opacity:0;transition:.2s;pointer-events:none}
+.toast{position:fixed;bottom:74px;left:50%;transform:translateX(-50%);background:#33302c;color:#fff;padding:11px 18px;border-radius:10px;font-size:14px;z-index:60;opacity:0;transition:.2s;pointer-events:none;max-width:90vw;text-align:center}
 .toast.show{opacity:1}
 </style>
 </head>
 <body>
 <header>
-  <div><h1>Anushka Aromas · Administración</h1><div class="sub">Cambiá precios y stock. Cuando termines, tocá Publicar.</div></div>
-  <button class="btn ghost" id="cfgBtn">⚙ Conexión</button>
+  <div><h1>Anushka Aromas · Administración</h1><div class="sub">Cambiá precios, stock y fotos. Cuando termines, tocá Publicar.</div></div>
+  <div class="hbtns">
+    <button class="btn add" id="addBtn">＋ Agregar producto</button>
+    <button class="btn ghost" id="cfgBtn">⚙ Conexión</button>
+  </div>
 </header>
 <div class="bar">
   <input id="q" type="search" placeholder="🔍 Buscar producto...">
   <select id="catFilter"><option value="">Todas las categorías</option></select>
-  <select id="stockFilter"><option value="">Todos</option><option value="in">En stock</option><option value="out">Sin stock</option><option value="hidden">Ocultos</option></select>
+  <select id="stockFilter"><option value="">Todos</option><option value="in">En stock</option><option value="out">Sin stock</option><option value="hidden">Ocultos</option><option value="new">Nuevos sin publicar</option></select>
 </div>
 <div class="wrap">
-  <div class="hint" id="hint">Editá el <b>precio</b> escribiendo el número, y usá los interruptores de <b>Stock</b> (en stock / sin stock) y <b>Mostrar</b> (visible en el catálogo). Los cambios no se aplican hasta que tocás <b>Publicar cambios</b>.</div>
+  <div class="hint" id="hint">Editá el <b>precio</b> escribiendo el número; usá los interruptores de <b>Stock</b> y <b>Mostrar</b>; tocá la <b>foto</b> para cambiarla; o <b>Agregar producto</b> para cargar uno nuevo. Nada se aplica hasta que tocás <b>Publicar cambios</b>.</div>
   <table>
     <thead><tr><th>Foto</th><th>Producto</th><th style="text-align:right">Precio</th><th>Stock</th><th>Mostrar</th></tr></thead>
     <tbody id="rows"><tr><td colspan="5" style="padding:40px;text-align:center;color:#999">Cargando…</td></tr></tbody>
@@ -73,22 +84,24 @@ a{color:var(--accent)}
 <div class="savebar">
   <div class="status" id="status">Sin cambios.</div>
   <div style="display:flex;gap:10px">
-    <button class="btn ghost" id="backupBtn">⬇ Descargar copia</button>
+    <button class="btn ghost" id="backupBtn">⬇ Copia</button>
     <button class="btn pub" id="pubBtn" disabled>Publicar cambios</button>
   </div>
 </div>
+<input type="file" id="fileInput" accept="image/*" style="display:none">
 
+<!-- Config modal -->
 <div class="modal" id="cfg">
   <div class="box">
     <h2>Conectar con GitHub</h2>
-    <p style="font-size:13.5px;color:#666;margin-top:4px">Para que "Publicar" actualice el catálogo online, necesitás un <b>token de acceso</b> de GitHub (se guarda solo en este navegador, en esta compu). Se hace una sola vez.</p>
+    <p style="font-size:13.5px;color:#666;margin-top:4px">Para que "Publicar" actualice el catálogo online, necesitás un <b>token de acceso</b> de GitHub (se guarda solo en este navegador). Se hace una sola vez.</p>
     <ol>
-      <li>Entrá a <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> (Fine-grained tokens) → <b>Generate new token</b>.</li>
-      <li>En <b>Repository access</b> elegí <b>Only select repositories</b> → <code>anushka-aromas</code>.</li>
-      <li>En <b>Permissions → Repository → Contents</b>, poné <b>Read and write</b>.</li>
-      <li>Generá el token, copialo y pegalo acá abajo.</li>
+      <li>Entrá a <a href="https://github.com/settings/tokens?type=beta" target="_blank" rel="noopener">github.com/settings/tokens</a> (Fine-grained) → <b>Generate new token</b>.</li>
+      <li><b>Repository access</b> → <b>Only select repositories</b> → <code>anushka-aromas</code>.</li>
+      <li><b>Permissions → Repository → Contents</b> → <b>Read and write</b>.</li>
+      <li>Generá, copiá y pegá el token abajo.</li>
     </ol>
-    <input id="tokenInput" type="password" placeholder="Pegá tu token (empieza con github_pat_...)" autocomplete="off">
+    <input id="tokenInput" type="password" placeholder="Pegá tu token (github_pat_...)" autocomplete="off">
     <div class="row">
       <button class="btn ghost" id="cfgClear">Borrar token</button>
       <button class="btn ghost" id="cfgClose">Cerrar</button>
@@ -96,40 +109,69 @@ a{color:var(--accent)}
     </div>
   </div>
 </div>
+
+<!-- Add product modal -->
+<div class="modal" id="addM">
+  <div class="box">
+    <h2>Agregar producto</h2>
+    <label>Nombre del producto</label>
+    <input id="np_name" placeholder="Ej: Difusor Vainilla">
+    <div class="two">
+      <div><label>Precio (solo número)</label><input id="np_price" inputmode="numeric" placeholder="6600"></div>
+      <div><label>Categoría</label><select id="np_top"></select></div>
+    </div>
+    <label>Subcategoría (opcional)</label>
+    <input id="np_sub" list="subsList" placeholder="Ej: Difusores">
+    <datalist id="subsList"></datalist>
+    <label>Foto del producto</label>
+    <input type="file" id="np_img" accept="image/*">
+    <div class="imgprev" id="np_prev"></div>
+    <div class="row">
+      <button class="btn ghost" id="addClose">Cancelar</button>
+      <button class="btn pub" id="addSave">Agregar a la lista</button>
+    </div>
+    <p style="font-size:12px;color:#999;margin-top:10px">Se agrega a la lista de cambios. Recordá tocar <b>Publicar cambios</b> para que aparezca online.</p>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 
 <script>
 const OWNER="lucasbarranco-blip", REPO="anushka-aromas", FILE="data.json", BRANCH="main";
-let DATA=null, PRODUCTS=[], dirty=new Set(), fileSha=null;
+let DATA=null, PRODUCTS=[], dirty=new Set();
+const pendingImg={};   // id -> {b64, dataurl}
+let photoTargetId=null;
 
-function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2600);}
+function toast(m,ms){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),ms||2800);}
 function fmtInt(n){return Number(n).toLocaleString('es-AR');}
-function sprite(ix){const M=DATA.meta.sprite;const s=Math.floor(ix/M.per),li=ix%M.per,c=li%M.cols,r=Math.floor(li/M.cols);return "background-image:url('sprite_"+s+".jpg');background-size:"+(M.cols*100)+"% "+(M.rows*100)+"%;background-position:"+(c/(M.cols-1)*100).toFixed(4)+"% "+(r/(M.rows-1)*100).toFixed(4)+"%";}
 function tokenGet(){try{return localStorage.getItem('gh_token')||'';}catch(e){return '';}}
+function sprite(ix){const M=DATA.meta.sprite;const s=Math.floor(ix/M.per),li=ix%M.per,c=li%M.cols,r=Math.floor(li/M.cols);return "background-image:url('sprite_"+s+".jpg');background-size:"+(M.cols*100)+"% "+(M.rows*100)+"%;background-position:"+(c/(M.cols-1)*100).toFixed(4)+"% "+(r/(M.rows-1)*100).toFixed(4)+"%";}
+function imgStyle(p){if(pendingImg[p.id])return "background-image:url('"+pendingImg[p.id].dataurl+"')";if(p.img)return "background-image:url('"+p.img+"?v="+Date.now()+"')";if(p.ix!=null)return sprite(p.ix);return "background:#eee";}
 
-fetch('data.json?v='+Date.now()).then(r=>r.json()).then(d=>{DATA=d;PRODUCTS=d.products;buildCatFilter();render();}).catch(e=>{document.getElementById('rows').innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#b23b3b">No se pudo cargar data.json</td></tr>';});
+fetch('data.json?v='+Date.now()).then(r=>r.json()).then(d=>{DATA=d;PRODUCTS=d.products;initSelects();render();}).catch(e=>{document.getElementById('rows').innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#b23b3b">No se pudo cargar data.json</td></tr>';});
 
-function buildCatFilter(){
-  const sel=document.getElementById('catFilter');
+function initSelects(){
   const tops=DATA.meta.topsOrder||[...new Set(PRODUCTS.map(p=>p.top))];
-  tops.forEach(t=>{const o=document.createElement('option');o.value=t;o.textContent=t;sel.appendChild(o);});
+  const cf=document.getElementById('catFilter'), nt=document.getElementById('np_top');
+  tops.forEach(t=>{cf.appendChild(opt(t,t));nt.appendChild(opt(t,t));});
+  const subs=[...new Set(PRODUCTS.map(p=>p.sub).filter(Boolean))].sort();
+  const dl=document.getElementById('subsList');subs.forEach(s=>{const o=document.createElement('option');o.value=s;dl.appendChild(o);});
 }
+function opt(v,t){const o=document.createElement('option');o.value=v;o.textContent=t;return o;}
 function markDirty(id){dirty.add(id);updateStatus();}
 function updateStatus(){
-  const n=dirty.size;const s=document.getElementById('status');const b=document.getElementById('pubBtn');
-  const hint=document.getElementById('hint');
-  if(n){s.innerHTML='<b>'+n+' producto'+(n>1?'s':'')+' con cambios sin publicar.</b>';b.disabled=false;hint.classList.add('dirty');}
-  else{s.textContent='Sin cambios.';b.disabled=true;hint.classList.remove('dirty');}
+  const n=dirty.size,s=document.getElementById('status'),b=document.getElementById('pubBtn'),h=document.getElementById('hint');
+  if(n){s.innerHTML='<b>'+n+' cambio'+(n>1?'s':'')+' sin publicar.</b>';b.disabled=false;h.classList.add('dirty');}
+  else{s.textContent='Sin cambios.';b.disabled=true;h.classList.remove('dirty');}
 }
 function passFilter(p){
   const q=document.getElementById('q').value.toLowerCase().trim();
-  const cf=document.getElementById('catFilter').value;
-  const sf=document.getElementById('stockFilter').value;
-  if(q && !p.n.toLowerCase().includes(q)) return false;
-  if(cf && p.top!==cf) return false;
-  if(sf==='in' && !p.stock) return false;
-  if(sf==='out' && p.stock) return false;
-  if(sf==='hidden' && p.visible) return false;
+  const cf=document.getElementById('catFilter').value, sf=document.getElementById('stockFilter').value;
+  if(q && !p.n.toLowerCase().includes(q))return false;
+  if(cf && p.top!==cf)return false;
+  if(sf==='in'&&!p.stock)return false;
+  if(sf==='out'&&p.stock)return false;
+  if(sf==='hidden'&&p.visible)return false;
+  if(sf==='new'&&!p._new)return false;
   return true;
 }
 function render(){
@@ -138,74 +180,107 @@ function render(){
   if(!list.length){tb.innerHTML='<tr><td colspan="5" style="padding:30px;text-align:center;color:#999">Sin resultados</td></tr>';return;}
   list.forEach(p=>{
     const tr=document.createElement('tr');if(!p.visible)tr.className='hidden-row';
-    const td=document.createElement('td');
     tr.innerHTML=
-      '<td><div class="athumb" style="'+sprite(p.ix)+'"></div></td>'+
-      '<td><div class="pname">'+p.n+'</div><div class="pcat">'+p.top+(p.sub?' › '+p.sub:'')+'</div></td>'+
+      '<td><div class="thumb-wrap"><div class="athumb" data-photo="'+p.id+'" style="'+imgStyle(p)+'"></div><span class="cam">📷</span></div></td>'+
+      '<td><div class="pname">'+p.n+(p._new?'<span class="pnew">nuevo</span>':'')+'</div><div class="pcat">'+p.top+(p.sub?' › '+p.sub:'')+'</div></td>'+
       '<td style="text-align:right"><input class="priceInput" inputmode="numeric" value="'+p.p+'" data-id="'+p.id+'"></td>'+
       '<td><span class="tgl'+(p.stock?' on':'')+'" data-stk="'+p.id+'"><span class="sw"></span>'+(p.stock?'En stock':'Sin stock')+'</span></td>'+
       '<td><span class="tgl'+(p.visible?' on':' red')+'" data-vis="'+p.id+'"><span class="sw"></span>'+(p.visible?'Visible':'Oculto')+'</span></td>';
     tb.appendChild(tr);
   });
-  tb.querySelectorAll('.priceInput').forEach(inp=>{
-    inp.addEventListener('input',e=>{
-      const id=+inp.dataset.id;const p=PRODUCTS.find(x=>x.id===id);
-      let v=parseInt(inp.value.replace(/\D/g,''))||0;p.p=v;inp.classList.add('changed');markDirty(id);
-    });
-  });
-  tb.querySelectorAll('[data-stk]').forEach(el=>{
-    el.addEventListener('click',()=>{const id=+el.dataset.stk;const p=PRODUCTS.find(x=>x.id===id);p.stock=p.stock?0:1;markDirty(id);render();});
-  });
-  tb.querySelectorAll('[data-vis]').forEach(el=>{
-    el.addEventListener('click',()=>{const id=+el.dataset.vis;const p=PRODUCTS.find(x=>x.id===id);p.visible=p.visible?0:1;markDirty(id);render();});
-  });
+  tb.querySelectorAll('.priceInput').forEach(inp=>inp.addEventListener('input',()=>{const id=inp.dataset.id;const p=PRODUCTS.find(x=>''+x.id===id);p.p=parseInt(inp.value.replace(/\D/g,''))||0;inp.classList.add('changed');markDirty(id);}));
+  tb.querySelectorAll('[data-stk]').forEach(el=>el.addEventListener('click',()=>{const id=el.dataset.stk;const p=PRODUCTS.find(x=>''+x.id===id);p.stock=p.stock?0:1;markDirty(id);render();}));
+  tb.querySelectorAll('[data-vis]').forEach(el=>el.addEventListener('click',()=>{const id=el.dataset.vis;const p=PRODUCTS.find(x=>''+x.id===id);p.visible=p.visible?0:1;markDirty(id);render();}));
+  tb.querySelectorAll('[data-photo]').forEach(el=>el.addEventListener('click',()=>{photoTargetId=el.dataset.photo;document.getElementById('fileInput').click();}));
 }
 ['q','catFilter','stockFilter'].forEach(id=>document.getElementById(id).addEventListener('input',render));
 
-// backup
-document.getElementById('backupBtn').addEventListener('click',()=>{
-  const blob=new Blob([JSON.stringify(DATA)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data-backup.json';a.click();
+// resize image file -> {b64, dataurl}
+function resizeImage(file,size){size=size||400;return new Promise((res,rej)=>{const img=new Image();img.onload=()=>{const c=document.createElement('canvas');c.width=size;c.height=size;const ctx=c.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,size,size);const s=Math.min(img.width,img.height);ctx.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,size,size);const durl=c.toDataURL('image/jpeg',0.82);res({dataurl:durl,b64:durl.split(',')[1]});};img.onerror=rej;img.src=URL.createObjectURL(file);});}
+
+// change photo of existing product
+document.getElementById('fileInput').addEventListener('change',async e=>{
+  const f=e.target.files[0];if(!f||!photoTargetId)return;
+  const im=await resizeImage(f);
+  const p=PRODUCTS.find(x=>''+x.id===photoTargetId);
+  p.img='custom/'+p.id+'.jpg';
+  pendingImg[p.id]={b64:im.b64,dataurl:im.dataurl};
+  markDirty(p.id);render();e.target.value='';toast('Foto lista (recordá Publicar)');
 });
+
+// backup
+document.getElementById('backupBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(DATA)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data-backup.json';a.click();});
 
 // config modal
 const cfg=document.getElementById('cfg');
 function openCfg(){document.getElementById('tokenInput').value=tokenGet();cfg.classList.add('open');}
 document.getElementById('cfgBtn').addEventListener('click',openCfg);
 document.getElementById('cfgClose').addEventListener('click',()=>cfg.classList.remove('open'));
-document.getElementById('cfgSave').addEventListener('click',()=>{
-  const t=document.getElementById('tokenInput').value.trim();
-  try{localStorage.setItem('gh_token',t);}catch(e){}
-  cfg.classList.remove('open');toast('Token guardado en este navegador');
-});
+document.getElementById('cfgSave').addEventListener('click',()=>{try{localStorage.setItem('gh_token',document.getElementById('tokenInput').value.trim());}catch(e){}cfg.classList.remove('open');toast('Token guardado en este navegador');});
 document.getElementById('cfgClear').addEventListener('click',()=>{try{localStorage.removeItem('gh_token');}catch(e){}document.getElementById('tokenInput').value='';toast('Token borrado');});
 
-// publish
+// add product modal
+const addM=document.getElementById('addM');
+let np_image=null;
+document.getElementById('addBtn').addEventListener('click',()=>{document.getElementById('np_name').value='';document.getElementById('np_price').value='';document.getElementById('np_sub').value='';document.getElementById('np_img').value='';document.getElementById('np_prev').style.backgroundImage='';np_image=null;addM.classList.add('open');});
+document.getElementById('addClose').addEventListener('click',()=>addM.classList.remove('open'));
+document.getElementById('np_img').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;np_image=await resizeImage(f);document.getElementById('np_prev').style.backgroundImage='url('+np_image.dataurl+')';});
+document.getElementById('addSave').addEventListener('click',()=>{
+  const name=document.getElementById('np_name').value.trim();
+  const price=parseInt(document.getElementById('np_price').value.replace(/\D/g,''))||0;
+  const top=document.getElementById('np_top').value;
+  const sub=document.getElementById('np_sub').value.trim();
+  if(!name){toast('Poné un nombre');return;}
+  if(!np_image){toast('Elegí una foto');return;}
+  const id='p'+Date.now();
+  const p={id:id,n:name,p:price,of:0,top:top,sub:sub,stock:1,visible:1,img:'custom/'+id+'.jpg',_new:true};
+  pendingImg[id]={b64:np_image.b64,dataurl:np_image.dataurl};
+  PRODUCTS.unshift(p);markDirty(id);addM.classList.remove('open');render();
+  toast('Producto agregado a la lista. Tocá Publicar.',3400);
+});
+
+// GitHub commit helpers
+async function ghGetSha(path,token){
+  const r=await fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+path+'?ref='+BRANCH,{headers:{Authorization:'token '+token,Accept:'application/vnd.github+json'}});
+  if(r.status===200){const j=await r.json();return j.sha;}
+  if(r.status===404)return null;
+  if(r.status===401)throw new Error('Token inválido o vencido (revisá ⚙ Conexión).');
+  throw new Error('Error '+r.status+' consultando GitHub');
+}
+async function ghPut(path,b64,message,token){
+  const sha=await ghGetSha(path,token);
+  const body={message:message,content:b64,branch:BRANCH};if(sha)body.sha=sha;
+  const r=await fetch('https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+path,{method:'PUT',headers:{Authorization:'token '+token,Accept:'application/vnd.github+json'},body:JSON.stringify(body)});
+  if(!r.ok){const e=await r.json();throw new Error(e.message||('Error al subir '+path));}
+}
+function toB64(str){return btoa(unescape(encodeURIComponent(str)));}
+
 document.getElementById('pubBtn').addEventListener('click',publish);
 async function publish(){
   const token=tokenGet();
-  if(!token){toast('Primero conectá tu token de GitHub');openCfg();return;}
-  const btn=document.getElementById('pubBtn');btn.disabled=true;btn.textContent='Publicando…';
+  if(!token){toast('Primero conectá tu token (⚙ Conexión)');openCfg();return;}
+  const btn=document.getElementById('pubBtn');btn.disabled=true;
+  const imgIds=Object.keys(pendingImg);
   try{
-    // get current sha
-    const api='https://api.github.com/repos/'+OWNER+'/'+REPO+'/contents/'+FILE;
-    const g=await fetch(api+'?ref='+BRANCH,{headers:{Authorization:'token '+token,Accept:'application/vnd.github+json'}});
-    if(g.status===401){throw new Error('Token inválido o vencido. Revisá la conexión (⚙).');}
-    if(g.status===404){throw new Error('No se encontró data.json en el repo.');}
-    const gj=await g.json();fileSha=gj.sha;
-    // build content
-    const json=JSON.stringify(DATA);
-    const content=btoa(unescape(encodeURIComponent(json)));
-    const put=await fetch(api,{method:'PUT',headers:{Authorization:'token '+token,Accept:'application/vnd.github+json'},
-      body:JSON.stringify({message:'Actualizar precios/stock ('+dirty.size+' cambios)',content:content,sha:fileSha,branch:BRANCH})});
-    if(!put.ok){const pe=await put.json();throw new Error(pe.message||'Error al publicar');}
+    let done=0;
+    for(const id of imgIds){
+      done++;btn.textContent='Subiendo foto '+done+'/'+imgIds.length+'…';
+      await ghPut('custom/'+id+'.jpg',pendingImg[id].b64,'Foto de producto '+id,token);
+    }
+    btn.textContent='Publicando…';
+    // clean internal flags before saving
+    const clean=JSON.parse(JSON.stringify(DATA));
+    clean.products.forEach(p=>{delete p._new;});
+    await ghPut(FILE,toB64(JSON.stringify(clean)),'Actualizar catálogo ('+dirty.size+' cambios)',token);
+    for(const k of imgIds)delete pendingImg[k];
+    PRODUCTS.forEach(p=>{delete p._new;});
     dirty.clear();updateStatus();
     document.querySelectorAll('.priceInput.changed').forEach(i=>i.classList.remove('changed'));
-    btn.textContent='Publicar cambios';
-    toast('✅ ¡Publicado! El catálogo se actualiza en ~1 minuto.');
+    btn.textContent='Publicar cambios';render();
+    toast('✅ ¡Publicado! El catálogo se actualiza en ~1 minuto.',4000);
   }catch(e){
     btn.textContent='Publicar cambios';btn.disabled=false;
-    toast('⚠ '+e.message);
+    toast('⚠ '+e.message,5000);
   }
 }
 </script>

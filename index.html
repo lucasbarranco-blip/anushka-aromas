@@ -116,6 +116,7 @@ fetch('data.json?v='+Date.now()).then(r=>r.json()).then(d=>{
 
 function waLink(p){return 'https://wa.me/'+META.whatsapp+'?text='+encodeURIComponent('¡Hola Anushka! 🌿 Quiero pedir: '+p.n+' ('+fmtInt(p.of||p.p)+')');}
 function sprite(ix){const M=META.sprite;const s=Math.floor(ix/M.per),li=ix%M.per,c=li%M.cols,r=Math.floor(li/M.cols);return "background-image:url('sprite_"+s+".jpg');background-size:"+(M.cols*100)+"% "+(M.rows*100)+"%;background-position:"+(c/(M.cols-1)*100).toFixed(4)+"% "+(r/(M.rows-1)*100).toFixed(4)+"%;background-repeat:no-repeat";}
+function imgStyle(p){if(p.img)return "background-image:url('"+p.img+"?v=1');background-size:cover;background-position:center;background-repeat:no-repeat";return sprite(p.ix);}
 
 function render(){
   const main=document.getElementById('main'); main.innerHTML='';
@@ -146,7 +147,7 @@ function card(p){
   const c=document.createElement('div');c.className='card'+(p.stock?'':' nostock');c.dataset.name=p.n.toLowerCase();
   const price=p.of? '<span class="old">'+fmtInt(p.p)+'</span>'+fmtInt(p.of) : fmtInt(p.p);
   c.innerHTML=
-    '<div class="imgbox" style="'+sprite(p.ix)+'"></div>'+
+    '<div class="imgbox" style="'+imgStyle(p)+'"></div>'+
     (p.stock?'':'<span class="badge sin">Sin stock</span>')+
     (p.of?'<span class="badge of">Oferta</span>':'')+
     '<div class="body"><div class="name">'+p.n+'</div>'+
@@ -174,7 +175,7 @@ function renderCart(){
   cart.forEach((q,i)=>{
     const p=PRODUCTS[i];const price=p.of||p.p;total+=price*q;n+=q;
     const row=document.createElement('div');row.className='ci';
-    row.innerHTML='<div class="cthumb" style="'+sprite(p.ix)+'"></div><div class="n">'+p.n+'<small>'+fmtInt(price)+'</small></div>'+
+    row.innerHTML='<div class="cthumb" style="'+imgStyle(p)+'"></div><div class="n">'+p.n+'<small>'+fmtInt(price)+'</small></div>'+
       '<div class="qty"><button data-m="'+i+'">−</button><span>'+q+'</span><button data-p="'+i+'">+</button></div>';
     row.querySelector('[data-m]').onclick=()=>{const nq=q-1;if(nq<=0){cart.delete(i);syncBtns();}else cart.set(i,nq);renderCart();};
     row.querySelector('[data-p]').onclick=()=>{cart.set(i,q+1);renderCart();};
