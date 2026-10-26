@@ -91,7 +91,31 @@ a{color:var(--accent)}
 .card2 label{display:block;font-size:12.5px;color:var(--muted);font-weight:600;margin:10px 0 4px}
 .card2 input[type=text],.card2 input:not([type]),.card2 input[type=number]{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:8px;font-size:14px}
 .ztable td,.ztable th{padding:6px}.ztable input{width:100%;padding:7px 8px;border:1px solid var(--line);border-radius:7px;font-size:13px}
-.ok{color:var(--sage);font-weight:600}.bad{color:var(--red);font-weight:600}
+.ok{color:var(--sage);font-weight:600}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi small{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:600}
+.kpi b{display:block;font-size:24px;margin-top:4px;color:var(--ink)}
+.kpi span{font-size:12px;color:var(--muted)}
+.kpi.alert{border-color:#f0c9a8;background:#fff8f1}.kpi.alert b{color:#a04f0c}
+.two2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.chart{display:flex;align-items:flex-end;gap:3px;height:150px;padding-top:10px}
+.chart i{flex:1;background:var(--sage);border-radius:3px 3px 0 0;min-height:2px;position:relative;opacity:.85}
+.chart i:hover{opacity:1}
+.chart i:hover::after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#33302c;color:#fff;font-size:11px;padding:3px 7px;border-radius:5px;white-space:nowrap;margin-bottom:4px;font-style:normal}
+.chax{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:6px}
+.lst{font-size:13.5px}.lst div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line)}
+.lst div:last-child{border-bottom:none}
+.ctable{width:100%;font-size:13.5px}
+.ctable td,.ctable th{padding:8px 6px}
+.cform{display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr .8fr 1fr auto;gap:8px;align-items:end}
+.cform label{margin:0 0 4px!important}
+.cform input,.cform select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:14px}
+.tagc{display:inline-block;font-size:11px;padding:2px 8px;border-radius:10px;background:#e1f0dc;color:#3b6b2c;font-weight:700}
+.tagc.off{background:#f1eee9;color:#8a8178}
+.giftbox{background:#fdf3f6;border:1px solid #f1cfda;color:#8a3550;padding:8px 10px;border-radius:8px;font-size:12.5px;margin:8px 0}
+@media(max-width:800px){.kpis{grid-template-columns:repeat(2,1fr)}.two2{grid-template-columns:1fr}.cform{grid-template-columns:1fr 1fr}}
+@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%}}.bad{color:var(--red);font-weight:600}
 @media(max-width:700px){.ord.open .ob{grid-template-columns:1fr}.hide-m{display:none}}
 </style>
 </head>
@@ -104,7 +128,7 @@ a{color:var(--accent)}
     <button class="btn ghost" id="cfgBtn">⚙ Conexión</button>
   </div>
 </header>
-<div class="tabs"><button class="tab on" data-tab="prod">Productos</button><button class="tab" data-tab="ord">Pedidos <span class="nb" id="nbNew" style="display:none"></span></button><button class="tab" data-tab="env">Envíos y tienda</button></div>
+<div class="tabs"><button class="tab" data-tab="res">Resumen</button><button class="tab on" data-tab="prod">Productos</button><button class="tab" data-tab="ord">Pedidos <span class="nb" id="nbNew" style="display:none"></span></button><button class="tab" data-tab="cup">Cupones</button><button class="tab" data-tab="env">Envíos y tienda</button></div>
 <div class="bar" id="prodBar">
   <input id="q" type="search" placeholder="🔍 Buscar producto...">
   <select id="catFilter"><option value="">Todas las categorías</option></select>
@@ -124,6 +148,9 @@ a{color:var(--accent)}
   <div id="ordList"></div>
 </div>
 <div class="wrap" id="tabEnv" style="display:none"></div>
+<div class="wrap" id="tabRes" style="display:none"></div>
+<div class="wrap" id="tabCup" style="display:none"></div>
+<div id="printArea"></div>
 <div class="savebar">
   <div class="status" id="status">Sin cambios.</div>
   <div style="display:flex;gap:10px">
@@ -358,7 +385,11 @@ document.querySelectorAll('.tab').forEach(t=>t.addEventListener('click',()=>{
   document.getElementById('prodBar').style.display=k==='prod'?'':'none';
   document.getElementById('tabOrd').style.display=k==='ord'?'':'none';
   document.getElementById('tabEnv').style.display=k==='env'?'':'none';
+  document.getElementById('tabRes').style.display=k==='res'?'':'none';
+  document.getElementById('tabCup').style.display=k==='cup'?'':'none';
   if(k==='ord')loadOrders();
+  if(k==='res')loadStats();
+  if(k==='cup')loadCoupons();
 }));
 
 // ================= pedidos =================
@@ -378,9 +409,10 @@ async function loadOrders(silent){
     ORDERS=j.pedidos;msg.innerHTML='';
     const c=j.conteo||{};const nb=document.getElementById('nbNew');nb.textContent=c.pagado||'';nb.style.display=c.pagado?'':'none';
     const fs=[['activos','Para gestionar',(c.pagado||0)+(c.preparando||0)+(c.listo_retiro||0)+(c.enviado||0)],['pagado','Pagados',c.pagado],['preparando','Preparando',c.preparando],['enviado','Enviados',c.enviado],['listo_retiro','Para retirar',c.listo_retiro],['entregado','Entregados',c.entregado],['cancelado','Cancelados',c.cancelado],['pendiente_pago','Sin pagar',c.pendiente_pago]];
-    document.getElementById('ordFilters').innerHTML=fs.map(f=>'<button class="fp'+(f[0]===ordFilter?' on':'')+'" data-f="'+f[0]+'">'+f[1]+(f[2]?' ('+f[2]+')':'')+'</button>').join('')+'<button class="fp" id="ordRef">↻ Actualizar</button>';
+    document.getElementById('ordFilters').innerHTML=fs.map(f=>'<button class="fp'+(f[0]===ordFilter?' on':'')+'" data-f="'+f[0]+'">'+f[1]+(f[2]?' ('+f[2]+')':'')+'</button>').join('')+'<button class="fp" id="ordRef">↻ Actualizar</button><button class="fp" id="ordCsv">⬇ Exportar Excel (CSV)</button>';
     document.querySelectorAll('[data-f]').forEach(b=>b.onclick=()=>{ordFilter=b.dataset.f;loadOrders();});
     document.getElementById('ordRef').onclick=()=>loadOrders();
+    document.getElementById('ordCsv').onclick=exportCsv;
     renderOrders();
   }catch(e){if(!silent||document.getElementById('tabOrd').style.display!=='none')msg.innerHTML='<div class="hint dirty">⚠ '+escH(e.message)+'</div>';}
 }
@@ -393,7 +425,9 @@ function renderOrders(){
     return '<div class="ord'+(openOrd.has(o.id)?' open':'')+'" data-o="'+o.id+'"><div class="oh"><span class="no">#'+o.pedido+'</span><span class="st '+o.estado+'">'+ST_LBL[o.estado]+'</span>'+
       '<div class="who">'+escH(c.nombre)+'<small>'+fdate(o.creado)+' · '+escH(e.nombre)+'</small></div><span class="tt">'+money(o.total)+'</span></div>'+
       '<div class="ob"><div>'+(o.stock_ok?'':'<div class="warnbox">⚠ Al pagarse, algún producto no tenía stock suficiente. Revisalo.</div>')+(o.nota_interna&&/MP|monto/.test(o.nota_interna)?'<div class="warnbox">'+escH(o.nota_interna)+'</div>':'')+
+        (o.regalo?'<div class="giftbox">🎁 <b>Es para regalo</b>'+(o.regalo.mensaje?' — tarjeta: “'+escH(o.regalo.mensaje)+'”':'')+'</div>':'')+
         '<h4>Productos</h4>'+o.items.map(l=>'<div class="li"><span>'+l.q+' × '+escH(l.n)+'</span><span>'+money(l.p*l.q)+'</span></div>').join('')+
+        (o.descuento?'<div class="li" style="color:#2e7d46"><span>Cupón '+escH(o.cupon||'')+'</span><span>−'+money(o.descuento)+'</span></div>':'')+(o.regalo?'<div class="li"><span>🎁 Envoltorio</span><span>'+(o.regalo.costo?money(o.regalo.costo):'Gratis')+'</span></div>':'')+
         '<div class="li"><span>Envío ('+escH(e.nombre)+')</span><span>'+(o.costo_envio?money(o.costo_envio):'Gratis')+'</span></div><div class="li"><b>Total</b><b>'+money(o.total)+'</b></div>'+
         '<h4 style="margin-top:12px">Cliente</h4><div>'+escH(c.nombre)+'</div><div>'+escH(c.email)+'</div><div>'+escH(c.tel)+'</div>'+
         '<h4 style="margin-top:12px">Entrega</h4><div>'+escH(dir)+'</div>'+(o.nota?'<h4 style="margin-top:12px">Nota del cliente</h4><div>'+escH(o.nota)+'</div>':'')+
@@ -401,11 +435,12 @@ function renderOrders(){
       '</div><div><h4>Estado</h4><select data-est>'+Object.keys(ST_LBL).map(k=>'<option value="'+k+'"'+(k===o.estado?' selected':'')+'>'+ST_LBL[k]+'</option>').join('')+'</select>'+
         (e.tipo!=='retiro'?'<h4>Código de seguimiento</h4><input data-trk placeholder="Ej: número de Correo Argentino" value="'+escH(o.tracking||'')+'">':'')+
         '<h4>Nota interna</h4><textarea data-nota rows="2" placeholder="Solo la ves vos">'+escH(o.nota_interna||'')+'</textarea>'+
-        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pub" data-save>Guardar</button><a class="btn ghost" style="text-decoration:none;background:var(--wa);color:#fff;border-color:var(--wa)" target="_blank" rel="noopener" href="'+wa+'">WhatsApp al cliente</a></div>'+
+        '<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn pub" data-save>Guardar</button><button class="btn ghost" data-print>🖨 Remito / etiqueta</button><a class="btn ghost" style="text-decoration:none;background:var(--wa);color:#fff;border-color:var(--wa)" target="_blank" rel="noopener" href="'+wa+'">WhatsApp al cliente</a></div>'+
       '</div></div></div>';}).join('');
   box.querySelectorAll('.ord').forEach(el=>{
     const id=+el.dataset.o;
     el.querySelector('.oh').onclick=()=>{if(openOrd.has(id))openOrd.delete(id);else openOrd.add(id);el.classList.toggle('open');};
+    el.querySelector('[data-print]').onclick=()=>printOrder(ORDERS.find(x=>x.id===id));
     el.querySelector('[data-save]').onclick=async()=>{
       const o=ORDERS.find(x=>x.id===id);const est=el.querySelector('[data-est]').value;const body={estado:est,nota_interna:el.querySelector('[data-nota]').value};
       const trk=el.querySelector('[data-trk]');if(trk)body.tracking=trk.value;
@@ -435,12 +470,15 @@ function renderEnv(){
      '<div class="two"><div><label>Peso por producto si no tiene (gramos)</label><input data-m="pesoDefault" inputmode="numeric" value="'+(e.pesoDefault||400)+'"></div><div></div></div>'+
      '<div id="srvState" style="margin-top:10px;font-size:13px"></div></div>'+
    '<div class="card2"><h3>Envío gratis</h3><p class="d">Desde este monto de compra el envío a domicilio es gratis (0 = nunca).</p><input data-m="gratisDesde" inputmode="numeric" value="'+(e.gratisDesde||0)+'"></div>'+
+   '<div class="card2"><h3>🎁 Envoltorio de regalo</h3><p class="d">Opción en el checkout para que el cliente pida el paquete para regalo, con mensaje en tarjeta.</p><label class="tgl'+((m.regalo||{}).activo?' on':'')+'" id="regTgl" style="color:inherit;margin:0"><span class="sw"></span>'+((m.regalo||{}).activo?'Activado':'Desactivado')+'</label><label>Precio del envoltorio ($, 0 = gratis)</label><input data-root="regalo.precio" inputmode="numeric" value="'+((m.regalo||{}).precio||0)+'"></div>'+
    '<div class="card2"><h3>Tienda</h3><label>Frase de la barra superior</label><input data-root="banner" value="'+escH(m.banner||'')+'"><label>WhatsApp (con 549, sin +)</label><input data-root="whatsapp" value="'+escH(m.whatsapp||'')+'">'+
+     '<label>Título de la portada</label><input data-root="hero.titulo" placeholder="Transformá tu espacio, elevá tus sentidos" value="'+escH((m.hero||{}).titulo||'')+'"><label>Texto de la portada</label><input data-root="hero.texto" placeholder="Fragancias, sahumos, piedras y decoración para armonizar tu hogar." value="'+escH((m.hero||{}).texto||'')+'">'+
      '<label>Servidor de la tienda (Worker)</label><input data-root="api" placeholder="https://anushka-tienda.xxxx.workers.dev" value="'+escH(m.api||'')+'"><p class="d" style="margin-top:6px">Vacío = la tienda funciona como catálogo y los pedidos van por WhatsApp.</p></div>';
   const setPath=(obj,path,val)=>{const ks=path.split('.');let o=obj;ks.slice(0,-1).forEach(k=>{o[k]=o[k]||{};o=o[k];});o[ks[ks.length-1]]=val;};
   const numKeys=['correo.recargo','pesoDefault','gratisDesde'];
   el.querySelectorAll('[data-m]').forEach(i=>i.addEventListener('input',()=>{const k=i.dataset.m;setPath(e,k,numKeys.includes(k)?(parseInt(i.value.replace(/\D/g,''))||0):i.value);markDirty('meta');}));
-  el.querySelectorAll('[data-root]').forEach(i=>i.addEventListener('input',()=>{m[i.dataset.root]=i.value.trim();markDirty('meta');}));
+  el.querySelectorAll('[data-root]').forEach(i=>i.addEventListener('input',()=>{const k=i.dataset.root;setPath(m,k,k==='regalo.precio'?(parseInt(i.value.replace(/\D/g,''))||0):i.value.trim());markDirty('meta');}));
+  document.getElementById('regTgl').onclick=()=>{m.regalo=m.regalo||{precio:0};m.regalo.activo=!m.regalo.activo;markDirty('meta');renderEnv();};
   el.querySelectorAll('[data-z]').forEach(i=>i.addEventListener('input',()=>{const z=e.zonas[+i.dataset.z],k=i.dataset.k;
     if(k==='precio')z.precio=parseInt(i.value.replace(/\D/g,''))||0;
     else if(k==='cp')z.cp=i.value.split(',').map(x=>x.trim()).filter(Boolean).map(x=>{const mm=x.match(/^(\d{4})\s*-\s*(\d{4})$/);if(mm)return [+mm[1],+mm[2]];const n=parseInt(x);return isNaN(n)?null:[n,n];}).filter(Boolean);
@@ -452,6 +490,70 @@ function renderEnv(){
   const ss=document.getElementById('srvState');
   if(API&&keyGet())api('/api/admin/ping').then(j=>{ss.innerHTML='Servidor: <span class="ok">conectado</span> · Mercado Pago: '+(j.mp?'<span class="ok">listo</span>':'<span class="bad">falta token</span>')+' · Correo Argentino: '+(j.correo?'<span class="ok">listo</span>':'<span class="bad">sin cuenta MiCorreo</span>')+' · Avisos Telegram: '+(j.telegram?'<span class="ok">activos</span>':'no');}).catch(err=>{ss.innerHTML='<span class="bad">⚠ '+escH(err.message)+'</span>';});
   else ss.textContent=API?'Cargá la clave de pedidos en ⚙ Conexión para ver el estado del servidor.':'';
+}
+
+// ================= resumen =================
+async function loadStats(){
+  const el=document.getElementById('tabRes');
+  if(!API||!keyGet()){el.innerHTML='<div class="hint">Para ver el resumen de ventas conectá el servidor y cargá la clave de pedidos en ⚙ Conexión.</div>'+lowStockHtml({});return;}
+  el.innerHTML='<div class="hint">Cargando…</div>';
+  try{const j=await api('/api/admin/stats');
+    const c=j.conteo||{};const prep=(c.pagado||0)+(c.preparando||0);
+    const max=Math.max(1,...j.dias.map(d=>d.v));
+    el.innerHTML='<div class="kpis">'+
+      kpi('Ventas de hoy',money(j.hoy.ventas),j.hoy.pedidos+' pedidos')+kpi('Últimos 7 días',money(j.semana.ventas),j.semana.pedidos+' pedidos')+
+      kpi('Este mes',money(j.mes.ventas),'Ticket promedio '+money(j.mes.ticket))+kpi('Para preparar',prep,(c.pagado||0)+' nuevos sin tocar',prep?'alert':'')+'</div>'+
+      '<div class="two2"><div class="card2"><h3>Ventas de los últimos 30 días</h3><div class="chart">'+j.dias.map(d=>'<i style="height:'+Math.max(1,d.v/max*100)+'%" data-t="'+d.d.slice(8)+'/'+d.d.slice(5,7)+' · '+money(d.v)+'"></i>').join('')+'</div><div class="chax"><span>'+fd(j.dias[0].d)+'</span><span>'+fd(j.dias[29].d)+'</span></div></div>'+
+      '<div class="card2"><h3>Más vendidos (90 días)</h3><div class="lst">'+(j.top.length?j.top.map(t=>'<div><span>'+escH(t.n)+'</span><b>'+t.q+' u.</b></div>').join(''):'<div><span style="color:#8a8178">Todavía no hay ventas</span></div>')+'</div></div></div>'+
+      lowStockHtml(j.stock)+
+      (prep?'<button class="btn pub" onclick="document.querySelector(\'.tab[data-tab=ord]\').click()">Ver pedidos para preparar →</button>':'');
+  }catch(e){el.innerHTML='<div class="hint dirty">⚠ '+escH(e.message)+'</div>';}
+}
+function fd(d){return d.slice(8)+'/'+d.slice(5,7);}
+function kpi(t,v,sub,cls){return '<div class="kpi '+(cls||'')+'"><small>'+t+'</small><b>'+v+'</b><span>'+sub+'</span></div>';}
+function lowStockHtml(st){const low=PRODUCTS.filter(p=>p.visible&&p.stock&&st[p.id]!=null&&st[p.id]<=3).sort((a,b)=>st[a.id]-st[b.id]);const off=PRODUCTS.filter(p=>p.visible&&(!p.stock||st[p.id]===0)).length;
+  return '<div class="card2"><h3>Stock bajo</h3><p class="d">Productos con 3 unidades o menos (solo los que tienen cantidad cargada) · '+off+' productos visibles sin stock.</p><div class="lst">'+(low.length?low.slice(0,15).map(p=>'<div><span>'+escH(p.n)+'</span><b style="color:'+(st[p.id]?'#a04f0c':'#c0392b')+'">'+st[p.id]+' u.</b></div>').join(''):'<div><span style="color:#8a8178">Nada para reponer por ahora 🎉</span></div>')+'</div></div>';}
+
+// ================= cupones =================
+async function loadCoupons(){
+  const el=document.getElementById('tabCup');
+  if(!API||!keyGet()){el.innerHTML='<div class="hint">Para crear cupones conectá el servidor y cargá la clave de pedidos en ⚙ Conexión.</div>';return;}
+  el.innerHTML='<div class="hint">Cargando…</div>';
+  try{renderCoupons((await api('/api/admin/coupons')).cupones);}catch(e){el.innerHTML='<div class="hint dirty">⚠ '+escH(e.message)+'</div>';}
+}
+function renderCoupons(list){
+  const el=document.getElementById('tabCup');
+  el.innerHTML='<div class="card2"><h3>Nuevo cupón</h3><p class="d">El cliente lo escribe en el checkout. El descuento se aplica sobre los productos (no sobre el envío).</p>'+
+    '<div class="cform"><div><label>Código</label><input id="c_code" placeholder="BIENVENIDA10" style="text-transform:uppercase"></div><div><label>Tipo</label><select id="c_tipo"><option value="pct">% de descuento</option><option value="monto">$ fijo</option></select></div>'+
+    '<div><label>Valor</label><input id="c_val" inputmode="numeric" placeholder="10"></div><div><label>Compra mínima $</label><input id="c_min" inputmode="numeric" placeholder="0"></div><div><label>Usos máx.</label><input id="c_max" inputmode="numeric" placeholder="∞"></div><div><label>Vence</label><input id="c_ven" type="date"></div><button class="btn pub" id="c_save">Crear</button></div></div>'+
+    '<div class="card2"><h3>Cupones</h3>'+(list.length?'<table class="ctable"><thead><tr><th>Código</th><th>Descuento</th><th class="hide-m">Mínimo</th><th>Usos</th><th class="hide-m">Vence</th><th>Estado</th><th></th></tr></thead><tbody>'+
+      list.map(c=>'<tr><td><b>'+escH(c.code)+'</b></td><td>'+(c.tipo==='pct'?c.valor+'%':money(c.valor))+'</td><td class="hide-m">'+(c.minimo?money(c.minimo):'—')+'</td><td>'+c.usos+(c.max_usos?' / '+c.max_usos:'')+'</td><td class="hide-m">'+(c.vence?c.vence.split('-').reverse().join('/'):'—')+'</td>'+
+        '<td><span class="tagc'+(c.activo?'':' off')+'">'+(c.activo?'Activo':'Pausado')+'</span></td><td style="white-space:nowrap"><button class="btn ghost" data-ct="'+escH(c.code)+'" style="padding:5px 10px">'+(c.activo?'Pausar':'Activar')+'</button> <button class="btn ghost" data-cd="'+escH(c.code)+'" style="padding:5px 10px">✕</button></td></tr>').join('')+'</tbody></table>':'<p class="d">Todavía no hay cupones.</p>')+'</div>';
+  document.getElementById('c_save').onclick=async()=>{const v=id=>document.getElementById(id).value.trim();
+    try{const r=await api('/api/admin/coupons',{method:'POST',body:{code:v('c_code'),tipo:v('c_tipo'),valor:v('c_val'),minimo:v('c_min'),max_usos:v('c_max'),vence:v('c_ven'),activo:true}});renderCoupons(r.cupones);toast('Cupón guardado');}catch(e){toast('⚠ '+e.message,4000);}};
+  el.querySelectorAll('[data-ct]').forEach(b=>b.onclick=async()=>{const c=list.find(x=>x.code===b.dataset.ct);try{const r=await api('/api/admin/coupons',{method:'POST',body:Object.assign({},c,{activo:!c.activo})});renderCoupons(r.cupones);}catch(e){toast('⚠ '+e.message,4000);}});
+  el.querySelectorAll('[data-cd]').forEach(b=>b.onclick=async()=>{if(!confirm('¿Borrar el cupón '+b.dataset.cd+'?'))return;try{const r=await api('/api/admin/coupons/delete',{method:'POST',body:{code:b.dataset.cd}});renderCoupons(r.cupones);}catch(e){toast('⚠ '+e.message,4000);}});
+}
+
+// ================= exportar / imprimir =================
+function exportCsv(){
+  if(!ORDERS.length){toast('No hay pedidos para exportar');return;}
+  const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+  const rows=[['Pedido','Fecha','Estado','Cliente','Email','Teléfono','Entrega','Dirección','Productos','Subtotal','Descuento','Envío','Total','Cupón','Regalo','Seguimiento']];
+  ORDERS.forEach(o=>{const e=o.envio;rows.push([o.pedido,new Date(o.creado).toLocaleString('es-AR'),ST_LBL[o.estado],o.cliente.nombre,o.cliente.email,o.cliente.tel,e.nombre,e.tipo==='retiro'?'':[e.calle,e.numero,e.piso,e.ciudad,e.provincia,e.cp].filter(Boolean).join(' '),o.items.map(l=>l.q+'x '+l.n).join(' | '),o.subtotal,o.descuento||0,o.costo_envio,o.total,o.cupon||'',o.regalo?('Sí '+(o.regalo.mensaje||'')):'',o.tracking||'']);});
+  const blob=new Blob(['﻿'+rows.map(r=>r.map(q).join(';')).join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='pedidos-anushka-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
+}
+function printOrder(o){
+  const c=o.cliente,e=o.envio;const dir=e.tipo==='retiro'?'RETIRA EN EL LOCAL':[e.calle+' '+e.numero+(e.piso?' '+e.piso:''),e.ciudad+(e.provincia?', '+e.provincia:''),'CP '+e.cp].join('<br>');
+  document.getElementById('printArea').innerHTML='<div style="font-family:Segoe UI,Arial,sans-serif;padding:24px;color:#000">'+
+    '<div style="border:2px dashed #000;padding:18px;margin-bottom:26px;max-width:420px"><div style="font-size:12px">DESTINATARIO</div><div style="font-size:22px;font-weight:700;margin:4px 0">'+escH(c.nombre)+'</div><div style="font-size:16px;line-height:1.4">'+dir+'</div><div style="margin-top:8px">Tel: '+escH(c.tel)+'</div><div style="margin-top:10px;font-size:13px">Pedido #'+o.pedido+' · '+escH(e.nombre)+'</div><div style="margin-top:10px;font-size:12px;border-top:1px solid #000;padding-top:6px">REMITENTE: Anushka Aromas · WhatsApp +'+escH(DATA.meta.whatsapp)+'</div></div>'+
+    '<h2 style="margin:0 0 4px">Remito · Pedido #'+o.pedido+'</h2><div style="font-size:13px;margin-bottom:12px">'+new Date(o.creado).toLocaleString('es-AR')+' · '+escH(c.email)+'</div>'+
+    '<table style="width:100%;border-collapse:collapse;font-size:14px"><tr><th style="text-align:left;border-bottom:1px solid #000;padding:6px">Cant.</th><th style="text-align:left;border-bottom:1px solid #000;padding:6px">Producto</th><th style="text-align:right;border-bottom:1px solid #000;padding:6px">Importe</th><th style="border-bottom:1px solid #000;padding:6px">✓</th></tr>'+
+    o.items.map(l=>'<tr><td style="padding:6px;border-bottom:1px solid #ccc">'+l.q+'</td><td style="padding:6px;border-bottom:1px solid #ccc">'+escH(l.n)+'</td><td style="padding:6px;border-bottom:1px solid #ccc;text-align:right">'+money(l.p*l.q)+'</td><td style="padding:6px;border-bottom:1px solid #ccc;text-align:center">☐</td></tr>').join('')+'</table>'+
+    '<div style="text-align:right;margin-top:10px;font-size:14px">'+(o.descuento?'Descuento: −'+money(o.descuento)+'<br>':'')+'Envío: '+money(o.costo_envio)+'<br><b style="font-size:18px">Total: '+money(o.total)+'</b></div>'+
+    (o.regalo?'<div style="margin-top:14px;border:1px solid #000;padding:10px">🎁 ENVOLVER PARA REGALO'+(o.regalo.mensaje?'<br>Tarjeta: “'+escH(o.regalo.mensaje)+'”':'')+'</div>':'')+(o.nota?'<div style="margin-top:10px">Nota del cliente: '+escH(o.nota)+'</div>':'')+'</div>';
+  window.print();
 }
 </script>
 </body>
