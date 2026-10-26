@@ -192,6 +192,28 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 .loading{text-align:center;padding:90px 20px;color:var(--muted)}
 .spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+.guides{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.guide{display:flex;gap:16px;align-items:center;background:linear-gradient(120deg,#fffdf9,#f3ebdf);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;transition:.15s}
+.guide:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.08);border-color:var(--gold)}
+.guide .gi{width:56px;height:56px;border-radius:14px;background:#efe5d6;display:flex;align-items:center;justify-content:center;font-size:28px;flex:none}
+.guide b{display:block;font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--accent-d);font-weight:700;line-height:1.1}
+.guide small{display:block;color:var(--muted);font-size:13px;margin-top:4px;line-height:1.4}
+.guide .go{margin-left:auto;color:var(--gold);font-size:22px;flex:none}
+.gintro{color:var(--accent);font-size:15px;line-height:1.6;max-width:760px;margin:6px 0 18px}
+.ggrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.gcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:8px}
+.gcard h3{margin:0;font-size:16px;color:var(--accent-d);display:flex;gap:8px;align-items:center}
+.gcard h3 span{font-size:20px}
+.gcard p{margin:0;font-size:13.5px;line-height:1.55;color:var(--ink)}
+.gcard .tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:auto;padding-top:4px}
+.gcard .tags a{font-size:12px;padding:5px 11px;border-radius:20px;background:#f3ebdf;color:var(--accent-d);font-weight:500}
+.gcard .tags a:hover{background:var(--accent-d);color:#fff}
+.gsteps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:8px}
+.gstep{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
+.gstep b{display:block;font-size:14px;color:var(--accent-d);margin-bottom:4px}
+.gstep span{font-size:13px;color:var(--muted);line-height:1.5}
+.gnote{font-size:12.5px;color:var(--muted);margin:22px 0 0;line-height:1.5}
+@media (max-width:900px){.guides{grid-template-columns:1fr}}
 @media (max-width:900px){
  .tiles{grid-template-columns:repeat(3,1fr)}
  .pp,.co{grid-template-columns:1fr;gap:20px}
@@ -234,7 +256,7 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 <footer>
   <div class="wrap">
     <div><h4>Anushka Aromas</h4><p id="ftag">Tienda holística</p></div>
-    <div><h4>Comprá</h4><a href="#/c/todos">Todos los productos</a><a href="#/ofertas" id="fOf" style="display:none">Ofertas</a><a href="#/ayuda">Cómo comprar</a></div>
+    <div><h4>Comprá</h4><a href="#/c/todos">Todos los productos</a><a href="#/ofertas" id="fOf" style="display:none">Ofertas</a><a href="#/ayuda">Cómo comprar</a><a href="#/guia/sahumerios">Guía de sahumerios</a><a href="#/guia/piedras">Guía de piedras y dijes</a></div>
     <div><h4>Contacto</h4><a id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/anushka_tienda_holistica" target="_blank" rel="noopener">Instagram</a></div>
   </div>
   <div class="legal">© <span id="yr"></span> Anushka Aromas · Pagos procesados por Mercado Pago</div>
@@ -322,9 +344,12 @@ function route(){
   if((m=h.match(/^#\/p\/(.+)$/)))return viewProduct(m[1]);
   if((m=h.match(/^#\/c\/([^/]+)(?:\/([^/]+))?$/)))return viewList({cat:m[1],sub:m[2]});
   if((m=h.match(/^#\/buscar\/(.+)$/)))return viewList({q:m[1]});
+  if((m=h.match(/^#\/sahumerios\/(.+)$/)))return viewList({q:m[1],tops:['Sagrada Madre','Aromanza']});
   if(h==='#/ofertas')return viewList({ofertas:1});
   if(h==='#/checkout')return viewCheckout();
   if(h==='#/ayuda')return viewHelp();
+  if(h==='#/guia/sahumerios')return viewGuiaSahumerios();
+  if(h==='#/guia/piedras')return viewGuiaPiedras();
   if((m=h.match(/^#\/pedido\/(\d+)\/(\w+)$/)))return viewOrder(m[1],m[2]);
   return viewHome();
 }
@@ -339,6 +364,8 @@ function viewHome(){
    '<div class="wrap"><div class="perks"><div class="perk"><div class="ic">💳</div><div><b>Pagá con Mercado Pago</b><small>Tarjeta, débito o dinero en cuenta</small></div></div>'+
    '<div class="perk"><div class="ic">📦</div><div><b>Envíos a todo el país</b><small>'+(gratisDesde()?'Gratis desde '+money(gratisDesde()):'Moto en AMBA y Correo Argentino')+'</small></div></div>'+
    '<div class="perk"><div class="ic">🏠</div><div><b>Retiro sin cargo</b><small>Coordinamos día y horario</small></div></div></div>'+
+   '<div class="guides"><a class="guide" href="#/guia/sahumerios"><div class="gi">🪔</div><div><b>Cómo elegir tu sahumerio</b><small>Según lo que buscás: limpiar, relajarte, atraer abundancia o armonizar.</small></div><span class="go">→</span></a>'+
+   '<a class="guide" href="#/guia/piedras"><div class="gi">💎</div><div><b>Piedras y dijes</b><small>Qué representa cada piedra y el significado de cada símbolo.</small></div><span class="go">→</span></a></div>'+
    '<div class="sec-h"><h2>Categorías</h2></div><div class="tiles">'+ts.map(t=>{const list=ALL.filter(p=>p.top===t);const rep=list.find(p=>avail(p))||list[0];return '<a class="tile" href="#/c/'+slug(t)+'"><div class="ti" style="'+imgStyle(rep)+'"></div><div class="tn">'+esc(t)+'<small>'+list.length+' productos</small></div></a>';}).join('')+'</div>'+
    '<div class="sec-h"><h2>Destacados</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid">'+destacados.map(card).join('')+'</div>'+
    ts.slice(0,3).map(t=>{const l=ALL.filter(p=>p.top===t&&avail(p)).slice(0,5);if(!l.length)return'';return '<div class="sec-h"><h2>'+esc(t)+'</h2><a href="#/c/'+slug(t)+'">Ver todo →</a></div><div class="grid">'+l.map(card).join('')+'</div>';}).join('')+
@@ -361,7 +388,7 @@ function viewList(f){
     const a=document.querySelector('#nav a[data-k="'+f.cat+'"]');if(a)a.classList.add('on');}
   else if(f.cat==='todos'){const a=document.querySelector('#nav a[data-k="todos"]');if(a)a.classList.add('on');}
   if(f.ofertas){list=ALL.filter(p=>p.of);title='Ofertas';const a=document.querySelector('#nav a[data-k="ofertas"]');if(a)a.classList.add('on');}
-  if(f.q){const words=norm(f.q).split(/\s+/).filter(Boolean);list=ALL.filter(p=>{const hay=norm(p.n+' '+p.top+' '+(p.sub||''));return words.every(w=>hay.includes(w));});title='Resultados para “'+f.q+'”';if($('#q').value!==f.q)$('#q').value=f.q;}
+  if(f.q){const words=norm(f.q).split(/\s+/).filter(Boolean);list=ALL.filter(p=>{if(f.tops&&!f.tops.includes(p.top))return false;const hay=norm(p.n+' '+p.top+' '+(p.sub||''));return words.every(w=>hay.includes(w));});title=(f.tops?'Sahumerios: ':'Resultados para “')+f.q+(f.tops?'':'”');if($('#q').value!==f.q)$('#q').value=f.q;}
   const key=location.hash;if(listState.key!==key){listState={sort:listState.sort,page:1,key};}
   const sorted=list.slice();
   const s=listState.sort;
@@ -553,6 +580,68 @@ async function viewOrder(id,t,paymentId){
       '<p class="note" style="margin-top:16px">Guardá este link para ver el estado de tu pedido.</p></div></div>');
     if(!paid&&['pending','in_process'].includes(o.pago)||(!paid&&paymentId&&!o.pago)){setTimeout(()=>{if(new URLSearchParams(location.search).get('pedido')===String(id))viewOrder(id,t);},8000);}
   }catch(e){setApp('<div class="wrap empty">No encontramos el pedido. Si ya pagaste, escribinos por <a href="https://wa.me/'+META.whatsapp+'" target="_blank"><u>WhatsApp</u></a>.</div>');}
+}
+
+/* ============ guías ============ */
+function gtags(list,base){return '<div class="tags">'+list.map(t=>'<a href="'+(t[1]&&t[1][0]==='#'?t[1]:(base||'#/buscar/')+encodeURIComponent(t[1]||t[0]))+'">'+esc(t[0])+'</a>').join('')+'</div>';}
+function gcard(ic,t,p,tags,base){return '<div class="gcard"><h3><span>'+ic+'</span>'+esc(t)+'</h3><p>'+p+'</p>'+(tags?gtags(tags,base):'')+'</div>';}
+function guideShell(title,intro,body){
+  setApp('<div class="wrap"><div class="listhead"><div class="crumbs"><a href="#/">Inicio</a> › Guías</div><h1>'+title+'</h1></div><p class="gintro">'+intro+'</p>'+body+
+  '<p class="gnote">Los significados son los que tradicionalmente se asocian a cada aroma, piedra o símbolo dentro de las prácticas holísticas. Son una guía para elegir con intención, no reemplazan ninguna consulta profesional.</p>'+
+  '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+META.whatsapp+'?text='+encodeURIComponent('¡Hola Anushka! Quería que me ayuden a elegir 🌿')+'">¿Dudas? Te asesoramos por WhatsApp</a><a class="btn ghost" href="#/">Volver al inicio</a></div></div>');
+}
+function viewGuiaSahumerios(){
+  const formas='<div class="sec-h" style="margin-top:6px"><h2>1. Elegí el formato</h2></div><div class="gsteps">'+
+    '<div class="gstep"><b>🪵 Varillas</b><span>Las clásicas. Duran unos 30–40 minutos y perfuman de forma suave.</span></div>'+
+    '<div class="gstep"><b>🌿 Sahumos</b><span>Atados de hierbas. Humo más intenso, ideales para limpiar ambientes.</span></div>'+
+    '<div class="gstep"><b>💣 Bombitas</b><span>Conos compactos de hierbas y resinas: mucho humo en poco tiempo.</span></div>'+
+    '<div class="gstep"><b>🔺 Pirámides y geometría</b><span>Se encienden en la punta y liberan el aroma de forma pareja.</span></div>'+
+    '<div class="gstep"><b>✨ Resinas naturales</b><span>Copal, mirra, olíbano: se queman sobre carbón o en hornito.</span></div></div>';
+  const intenciones='<div class="sec-h"><h2>2. Elegí según tu intención</h2></div><div class="ggrid">'+
+    gcard('🧹','Limpieza energética','Para renovar la energía de la casa, después de una mudanza, una discusión o cuando el ambiente se siente “pesado”. Los aromas más usados son la salvia, la ruda, el copal y el romero.',[['Salvia'],['Copal'],['Romero'],['Limpieza']],'#/sahumerios/')+
+    gcard('🕊️','Calma y relajación','Para bajar el ritmo al final del día, meditar o acompañar un baño. Lavanda, manzanilla y sándalo son los preferidos.',[['Lavanda'],['Manzanilla'],['Sándalo','sandalo']],'#/sahumerios/')+
+    gcard('🙏','Protección','Tradicionalmente se usan para proteger el hogar y a quienes lo habitan: palo santo, mirra, incienso y ruda.',[['Palo santo'],['Mirra'],['Incienso'],['Ruda']],'#/sahumerios/')+
+    gcard('💰','Abundancia y prosperidad','Para abrir caminos y atraer buenas oportunidades, por ejemplo en un negocio o un proyecto nuevo. Canela, benjuí y citronella.',[['Canela'],['Benjuí','benjui'],['Destrabar'],['Citronella']],'#/sahumerios/')+
+    gcard('❤️','Amor y armonía','Para generar un clima cálido en pareja o en familia. Rosas y caléndula son los más elegidos.',[['Rosas'],['Caléndula','calendula']],'#/sahumerios/')+
+    gcard('🧘','Meditación y espiritualidad','Para conectar con uno mismo, rezar o hacer yoga. Olíbano (frankincense), mirra y sahumerios tibetanos.',[['Olíbano','olibano'],['Frankincense'],['Tibetanos'],['7 chakras']],'#/sahumerios/')+
+    '</div>';
+  const tips='<div class="sec-h"><h2>3. Tips para usarlos</h2></div><div class="gsteps">'+
+    '<div class="gstep"><b>Ventilá</b><span>Abrí una ventana: el humo tiene que poder circular y salir.</span></div>'+
+    '<div class="gstep"><b>Usá un porta sahumerio</b><span>Sobre una superficie que no se queme y lejos de cortinas.</span></div>'+
+    '<div class="gstep"><b>Recorré los ambientes</b><span>Para limpiar, se suele pasar por los rincones, de adentro hacia la puerta.</span></div>'+
+    '<div class="gstep"><b>Nunca lo dejes solo</b><span>Y siempre fuera del alcance de chicos y mascotas.</span></div></div>'+
+    '<div style="margin-top:10px"><a class="btn sage" href="#/c/'+slug('Sagrada Madre')+'">Ver todos los sahumerios</a> <a class="btn ghost" href="#/buscar/porta">Porta sahumerios</a></div>';
+  guideShell('Cómo elegir tu sahumerio','Cada aroma acompaña una intención distinta. Primero elegí el formato que más te guste y después el aroma según lo que querés para tu espacio.',formas+intenciones+tips);
+}
+function viewGuiaPiedras(){
+  const piedras='<div class="sec-h" style="margin-top:6px"><h2>Piedras</h2></div><div class="ggrid">'+
+    gcard('💜','Amatista','Asociada a la calma, la intuición y el buen descanso. Es una de las piedras más elegidas para meditar.',[['Ver amatista','amatista']])+
+    gcard('🤍','Cuarzo cristal','La “piedra maestra”: se la vincula con la claridad mental y con potenciar la energía de otras piedras.',[['Ver cuarzo','cuarzo cristal']])+
+    gcard('🖤','Turmalina negra','Una de las piedras de protección más conocidas: se usa para “absorber” la energía negativa.',[['Ver turmalina','turmalina']])+
+    gcard('✨','Cuarzo turmalinado','Une la claridad del cuarzo con la protección de la turmalina. Se lo asocia al equilibrio.',[['Ver turmalinado','turmalinado']])+
+    gcard('🌙','Selenita','Asociada a la limpieza y la paz. Se usa también para “limpiar” otras piedras apoyándolas encima.',[['Ver selenita','selenita']])+
+    gcard('⚫','Shungita','Piedra negra asociada a la protección y al equilibrio frente a la energía de los aparatos electrónicos.',[['Ver shungita','shungita']])+
+    gcard('🩵','Aguamarina','Vinculada al agua y al mar: se la asocia con la serenidad y la comunicación.',[['Ver aguamarina','aguamarina']])+
+    gcard('💚','Fluorita','Se la conoce como la piedra de la concentración y el orden mental; ideal para estudiar.',[['Ver fluorita','fluorita']])+
+    gcard('🌈','Labradorita','Brilla con reflejos de colores. Se la asocia con la intuición y la transformación.',[['Ver labradorita','labradorita']])+
+    gcard('💙','Ágata azul','Asociada a la tranquilidad y a expresarse con calma.',[['Ver ágata','agata']])+
+    gcard('💎','Esmeralda','Piedra del corazón: se la vincula al amor, la lealtad y la renovación.',[['Ver esmeralda','esmeralda']])+
+    gcard('🌿','Serafinita','De vetas plateadas como plumas; se la asocia con la conexión espiritual.',[['Ver serafinita','serafinita']])+
+    gcard('🌕','Adularia (piedra luna)','Asociada a la energía femenina, los ciclos y los nuevos comienzos.',[['Ver adularia','adularia']])+
+    '</div>';
+  const simbolos='<div class="sec-h"><h2>Símbolos de los dijes</h2></div><div class="ggrid">'+
+    gcard('🔯','Cubo de Metatrón','Figura de la geometría sagrada que reúne todas las formas. Se lo asocia a la protección y al equilibrio.',[['Ver Metatrón','metatron']])+
+    gcard('🌈','7 chakras','Los siete colores representan los centros de energía del cuerpo. Simboliza armonía y equilibrio.',[['Ver 7 chakras','7 chakras']])+
+    gcard('🌳','Árbol de la vida','Representa la conexión entre la tierra y el cielo, la familia y el crecimiento.',[['Ver árbol','arbol de la vida']])+
+    gcard('🔮','Péndulo','Además de dije, se usa como herramienta de radiestesia para hacer preguntas de sí o no.',[['Ver péndulos','pendulo']])+
+    gcard('👼','7 arcángeles y alas','Símbolos de protección y de guía espiritual.',[['Ver arcángeles','arcangeles'],['Ver alas','alas']])+
+    gcard('🧿','Ojo turco','Amuleto tradicional contra la envidia y el “mal de ojo”.',[['Ver ojo turco','turcos']])+
+    gcard('🪢','Nudo celta madre e hijo','Representa el vínculo eterno entre una madre y su hijo. Un regalo muy especial.',[['Ver nudo celta','nudo celta']])+
+    gcard('⭕','Piedra Pi','Disco con un hueco en el centro; en la tradición china simboliza el cielo y la buena fortuna.',[['Ver piedra Pi','#/p/27847192']])+
+    gcard('🐢','Tortuga','Símbolo de longevidad, paciencia y estabilidad.',[['Ver tortuga','tortuga']])+
+    gcard('🐸','Rana','Asociada a la abundancia, la prosperidad y la transformación.',[['Ver rana','rana']])+
+    '</div><div style="margin-top:18px"><a class="btn sage" href="#/c/piedras/dijes">Ver todos los dijes</a> <a class="btn ghost" href="#/c/piedras">Toda la sección Piedras</a></div>';
+  guideShell('Piedras y dijes: qué significa cada uno','Cada piedra tiene una energía y un significado que se le atribuye desde hace siglos. Elegí la tuya según lo que querés atraer o como regalo con intención.',piedras+simbolos);
 }
 
 function viewHelp(){
