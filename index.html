@@ -28,7 +28,7 @@ header.top{background:#fffdf9;border-bottom:1px solid var(--line);position:stick
 .brand{display:flex;align-items:center;gap:10px;flex:none}
 .brand img{height:46px;width:auto;border-radius:8px}
 .brand span{font-family:'Cormorant Garamond',serif;font-weight:700;font-size:22px;color:var(--accent-d);white-space:nowrap}
-.search{flex:1;position:relative;max-width:520px;margin:0 auto}
+.search{flex:1;position:relative;max-width:520px;margin:0 auto;display:block}
 .search input{width:100%;padding:11px 16px 11px 40px;border:1px solid var(--line);border-radius:30px;background:var(--bg);outline:none;font-size:14px}
 .search input:focus{border-color:var(--gold);background:#fff}
 .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--muted)}
@@ -114,8 +114,9 @@ nav.cats a:hover,nav.cats a.on{color:var(--accent-d);border-bottom-color:var(--g
 .qty span{min-width:34px;text-align:center;font-weight:600}
 .qty.sm button{width:30px;height:32px;font-size:15px}.qty.sm span{min-width:24px;font-size:13.5px}
 .pp .info{margin-top:22px;border-top:1px solid var(--line)}
-.pp .info div{padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;gap:12px;color:var(--accent-d)}
-.pp .info div span:first-child{font-size:18px}
+.pp .info>div{padding:14px 0;border-bottom:1px solid var(--line);font-size:14px;display:flex;gap:12px;color:var(--accent-d)}
+.pp .info>div>span:first-child{font-size:18px}
+.pp .info div>span{min-width:0}
 .shipcalc{display:flex;gap:8px;margin-top:8px}
 .shipcalc input{flex:1;padding:10px 12px;border:1px solid var(--line);border-radius:10px;min-width:0}
 .shipres{font-size:13px;margin-top:8px}
@@ -192,6 +193,39 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 .loading{text-align:center;padding:90px 20px;color:var(--muted)}
 .spin{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.5);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+.fav{position:absolute;right:10px;top:10px;z-index:3;width:34px;height:34px;border-radius:50%;border:none;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(0,0,0,.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.fav svg{width:18px;height:18px;stroke:var(--accent-d);fill:none;stroke-width:2}
+.fav.on svg{fill:#d0485e;stroke:#d0485e}
+.fav:hover{transform:scale(1.08)}
+.card .imgwrap{position:relative}
+.card .imgwrap .imgbox{display:block}
+.card .imgwrap .fav{top:auto;bottom:10px;right:10px}
+.badge.pct{background:#d0485e;left:auto;right:10px}
+.sugg{position:absolute;top:calc(100% + 6px);left:0;right:0;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 16px 40px rgba(0,0,0,.14);z-index:70;overflow:hidden;display:none}
+.sugg.open{display:block}
+.sugg a{display:flex;gap:12px;align-items:center;padding:9px 12px;font-size:13.5px}
+.sugg a:hover,.sugg a.hl{background:var(--bg)}
+.sugg a .thumb{width:44px;height:44px;border-radius:8px}
+.sugg a span{flex:1;line-height:1.3}
+.sugg a b{color:var(--accent-d);white-space:nowrap}
+.sugg .all{justify-content:center;font-weight:600;color:var(--accent);border-top:1px solid var(--line)}
+.sugg .none{padding:14px;color:var(--muted);font-size:13.5px}
+.toTop{position:fixed;bottom:86px;right:26px;z-index:59;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:#fff;box-shadow:0 4px 14px rgba(0,0,0,.12);cursor:pointer;font-size:18px;color:var(--accent-d);display:none}
+.toTop.show{display:block}
+.share{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.share button,.share a{font-size:13px;padding:8px 13px;border-radius:20px;border:1px solid var(--line);background:#fff;cursor:pointer;color:var(--accent-d);display:inline-flex;gap:6px;align-items:center}
+.share button:hover,.share a:hover{border-color:var(--gold)}
+.chk{display:flex;gap:10px;align-items:flex-start;cursor:pointer;font-size:14px}
+.chk input{width:18px;height:18px;accent-color:var(--accent-d);margin-top:2px;flex:none}
+.cuprow{display:flex;gap:8px;margin:10px 0 4px}
+.cuprow input{flex:1;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;text-transform:uppercase}
+.cupok{font-size:12.5px;color:var(--green);display:flex;justify-content:space-between;align-items:center}
+.cupok button{background:none;border:none;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:12px}
+.row.disc{color:var(--green)}
+.track{max-width:520px;margin:30px auto 40px}
+.priceSel{padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:#fff;font-size:13px;color:var(--accent-d)}
+.pill.tg{display:inline-flex;gap:6px;align-items:center}
+.recent .grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
 .guides{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
 .guide{display:flex;gap:16px;align-items:center;background:linear-gradient(120deg,#fffdf9,#f3ebdf);border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;transition:.15s}
 .guide:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.08);border-color:var(--gold)}
@@ -216,7 +250,7 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 @media (max-width:900px){.guides{grid-template-columns:1fr}}
 @media (max-width:900px){
  .tiles{grid-template-columns:repeat(3,1fr)}
- .pp,.co{grid-template-columns:1fr;gap:20px}
+ .pp,.co{grid-template-columns:minmax(0,1fr);gap:20px}
  .summary{position:static}
  .hero .logo{display:none}
  .hero h1{font-size:36px}
@@ -247,7 +281,8 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
     <a class="brand" href="#/"><img src="logo.png" alt="Anushka Aromas"><span>Anushka Aromas</span></a>
     <div class="sp"></div>
     <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="q" type="search" placeholder="Buscar productos…" autocomplete="off"></label>
+      <input id="q" type="search" placeholder="Buscar productos…" autocomplete="off" aria-autocomplete="list"><div class="sugg" id="sugg"></div></label>
+    <a class="iconbtn" id="favBtn" href="#/favoritos" aria-label="Favoritos"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9Z"/></svg><span class="cnt" id="favCnt">0</span></a>
     <button class="iconbtn" id="cartBtn" aria-label="Carrito"><svg viewBox="0 0 24 24"><path d="M6 7h12l-1.2 11.2a2 2 0 0 1-2 1.8H9.2a2 2 0 0 1-2-1.8L6 7Z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/></svg><span class="lbl">Carrito</span><span class="cnt" id="cnt">0</span></button>
   </div>
   <nav class="cats"><div class="wrap" id="nav"></div></nav>
@@ -256,7 +291,7 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 <footer>
   <div class="wrap">
     <div><h4>Anushka Aromas</h4><p id="ftag">Tienda holística</p></div>
-    <div><h4>Comprá</h4><a href="#/c/todos">Todos los productos</a><a href="#/ofertas" id="fOf" style="display:none">Ofertas</a><a href="#/ayuda">Cómo comprar</a><a href="#/guia/sahumerios">Guía de sahumerios</a><a href="#/guia/piedras">Guía de piedras y dijes</a></div>
+    <div><h4>Comprá</h4><a href="#/c/todos">Todos los productos</a><a href="#/ofertas" id="fOf" style="display:none">Ofertas</a><a href="#/ayuda">Cómo comprar</a><a href="#/seguimiento">Seguí tu pedido</a><a href="#/favoritos">Mis favoritos</a><a href="#/guia/sahumerios">Guía de sahumerios</a><a href="#/guia/piedras">Guía de piedras y dijes</a></div>
     <div><h4>Contacto</h4><a id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/anushka_tienda_holistica" target="_blank" rel="noopener">Instagram</a></div>
   </div>
   <div class="legal">© <span id="yr"></span> Anushka Aromas · Pagos procesados por Mercado Pago</div>
@@ -269,6 +304,7 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
   <div class="dfoot" id="dfoot"></div>
 </aside>
 <div class="toast" id="toast"></div>
+<button class="toTop" id="toTop" aria-label="Volver arriba">↑</button>
 
 <script>
 /* ============ estado ============ */
@@ -276,6 +312,10 @@ let META={}, ALL=[], BYID=new Map(), STOCK={}, API='';
 const CART_KEY='anushka_cart_v1', CUST_KEY='anushka_cliente_v1';
 let cart=loadLS(CART_KEY,{}); // id -> qty
 let lastShip=null; // última cotización usada en checkout
+const FAV_KEY='anushka_favs_v1', SEEN_KEY='anushka_vistos_v1';
+let favs=loadLS(FAV_KEY,[]); if(!Array.isArray(favs))favs=[];
+let seen=loadLS(SEEN_KEY,[]); if(!Array.isArray(seen))seen=[];
+let cupon=null; // {code,descuento,label}
 function loadLS(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v&&typeof v==='object'?v:d;}catch(e){return d;}}
 function saveLS(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
 const $=s=>document.querySelector(s);
@@ -307,10 +347,33 @@ function initChrome(){
   $('#fWa').textContent='WhatsApp +'+META.whatsapp;
   if(ALL.some(p=>p.of))$('#fOf').style.display='';
   const nav=$('#nav');nav.innerHTML='<a href="#/c/todos" data-k="todos">Todos</a>'+(ALL.some(p=>p.of)?'<a href="#/ofertas" data-k="ofertas">Ofertas</a>':'')+tops().map(t=>'<a href="#/c/'+slug(t)+'" data-k="'+slug(t)+'">'+esc(t)+'</a>').join('');
-  $('#q').addEventListener('input',debounce(e=>{const v=e.target.value.trim();if(v)location.hash='#/buscar/'+encodeURIComponent(v);else if(location.hash.startsWith('#/buscar'))location.hash='#/';},250));
+  initSearch();
+  favs=favs.filter(id=>BYID.has(id));updateFavCount();
+  const tt=$('#toTop');window.addEventListener('scroll',()=>tt.classList.toggle('show',window.scrollY>900),{passive:true});tt.onclick=()=>window.scrollTo({top:0,behavior:'smooth'});
+  document.addEventListener('click',e=>{const b=e.target.closest('[data-fav]');if(b){e.preventDefault();toggleFav(b.dataset.fav,b);}});
   $('#cartBtn').onclick=()=>openCart(true);$('#closeD').onclick=()=>openCart(false);$('#ov').onclick=()=>openCart(false);
   updateCount();
 }
+function searchList(q,limit){const words=norm(q).split(/\s+/).filter(Boolean);if(!words.length)return[];const r=ALL.filter(p=>{const hay=norm(p.n+' '+p.top+' '+(p.sub||''));return words.every(w=>hay.includes(w));});r.sort((a,b)=>(avail(b)-avail(a))||(norm(a.n).indexOf(words[0])-norm(b.n).indexOf(words[0])));return limit?r.slice(0,limit):r;}
+function initSearch(){
+  const q=$('#q'),sg=$('#sugg');let hl=-1;
+  const close=()=>{sg.classList.remove('open');hl=-1;};
+  const show=()=>{const v=q.value.trim();if(v.length<2){close();return;}const r=searchList(v,6);const total=searchList(v).length;
+    sg.innerHTML=r.length?r.map(p=>'<a href="#/p/'+p.id+'"><div class="thumb" style="'+imgStyle(p)+'"></div><span>'+esc(p.n)+'<br><small style="color:var(--muted)">'+esc(p.sub||p.top)+'</small></span><b>'+money(priceOf(p))+'</b></a>').join('')+'<a class="all" href="#/buscar/'+encodeURIComponent(v)+'">Ver los '+total+' resultados →</a>':'<div class="none">No encontramos “'+esc(v)+'”. Probá con otra palabra.</div>';
+    sg.classList.add('open');};
+  q.addEventListener('input',debounce(show,120));q.addEventListener('focus',show);
+  q.addEventListener('keydown',e=>{const items=[...sg.querySelectorAll('a')];
+    if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();if(!items.length)return;hl=(hl+(e.key==='ArrowDown'?1:-1)+items.length)%items.length;items.forEach((a,i)=>a.classList.toggle('hl',i===hl));}
+    else if(e.key==='Enter'){e.preventDefault();const v=q.value.trim();if(hl>=0&&items[hl])location.hash=items[hl].getAttribute('href');else if(v)location.hash='#/buscar/'+encodeURIComponent(v);close();q.blur();}
+    else if(e.key==='Escape'){close();q.blur();}});
+  document.addEventListener('click',e=>{if(!e.target.closest('.search'))close();});
+  sg.addEventListener('click',()=>{close();});
+}
+function favIcon(id){return '<button class="fav'+(favs.includes(id)?' on':'')+'" data-fav="'+id+'" aria-label="Favorito"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9.2-9A5 5 0 0 1 12 6a5 5 0 0 1 9.2 5c-2.2 4.6-9.2 9-9.2 9Z"/></svg></button>';}
+function toggleFav(id,btn){const i=favs.indexOf(id);if(i>=0)favs.splice(i,1);else favs.unshift(id);saveLS(FAV_KEY,favs);updateFavCount();
+  document.querySelectorAll('[data-fav="'+id+'"]').forEach(b=>b.classList.toggle('on',i<0));toast(i<0?'❤ Guardado en favoritos':'Quitado de favoritos');if(location.hash==='#/favoritos')viewFavs();}
+function updateFavCount(){const c=$('#favCnt');c.textContent=favs.length;c.style.display=favs.length?'inline-flex':'none';}
+function setTitle(t){document.title=(t?t+' · ':'')+'Anushka Aromas';}
 function debounce(f,ms){let t;return(...a)=>{clearTimeout(t);t=setTimeout(()=>f(...a),ms);};}
 function gratisDesde(){return (META.envio&&META.envio.gratisDesde)||0;}
 function tops(){const by=new Set(ALL.map(p=>p.top));const o=(META.topsOrder||[]).filter(t=>by.has(t));return o.concat([...by].filter(t=>!o.includes(t)));}
@@ -319,14 +382,15 @@ function tops(){const by=new Set(ALL.map(p=>p.top));const o=(META.topsOrder||[])
 function sprite(ix){const M=META.sprite;const s=Math.floor(ix/M.per),li=ix%M.per,c=li%M.cols,r=Math.floor(li/M.cols);return "background-image:url('sprite_"+s+".jpg');background-size:"+(M.cols*100)+"% "+(M.rows*100)+"%;background-position:"+(c/(M.cols-1)*100).toFixed(4)+"% "+(r/(M.rows-1)*100).toFixed(4)+"%;background-repeat:no-repeat";}
 function imgStyle(p){if(!p)return'';if(p.img)return "background-image:url('"+p.img+"');background-size:cover;background-position:center;background-repeat:no-repeat";if(p.ix!=null)return sprite(p.ix);return '';}
 function priceOf(p){return p.of||p.p;}
+function pct(p){return p.of&&p.p>p.of?Math.round((1-p.of/p.p)*100):0;}
 function maxQty(p){if(!p.stock)return 0;const s=STOCK[p.id];return s==null?99:Math.max(0,s);}
 function avail(p){return maxQty(p)>0;}
 function priceHtml(p){return p.of?'<span class="old">'+money(p.p)+'</span>'+money(p.of):money(p.p);}
 function card(p){
   const a=avail(p), s=STOCK[p.id];
   return '<div class="card'+(a?'':' nostock')+'">'+
-    (a?'':'<span class="badge sin">Sin stock</span>')+(a&&s!=null&&s<=3?'<span class="badge few">¡Últimas '+s+'!</span>':'')+(p.of?'<span class="badge of">Oferta</span>':'')+
-    '<a class="imgbox" href="#/p/'+p.id+'" style="'+imgStyle(p)+'" aria-label="'+esc(p.n)+'"></a>'+
+    (a?'':'<span class="badge sin">Sin stock</span>')+(a&&s!=null&&s<=3?'<span class="badge few">¡Últimas '+s+'!</span>':'')+(p.of?'<span class="badge pct">-'+pct(p)+'%</span>':'')+
+    '<div class="imgwrap"><a class="imgbox" href="#/p/'+p.id+'" style="'+imgStyle(p)+'" aria-label="'+esc(p.n)+'"></a>'+favIcon(p.id)+'</div>'+
     '<div class="body"><div class="cat">'+esc(p.sub||p.top)+'</div><a class="name" href="#/p/'+p.id+'">'+esc(p.n)+'</a>'+
     '<div class="price">'+priceHtml(p)+'</div>'+
     (a?'<button class="add" data-add="'+p.id+'">Agregar al carrito</button>':'<button class="add" disabled>Sin stock</button>')+
@@ -348,26 +412,32 @@ function route(){
   if(h==='#/ofertas')return viewList({ofertas:1});
   if(h==='#/checkout')return viewCheckout();
   if(h==='#/ayuda')return viewHelp();
+  if(h==='#/favoritos')return viewFavs();
+  if(h==='#/seguimiento')return viewTrack();
   if(h==='#/guia/sahumerios')return viewGuiaSahumerios();
   if(h==='#/guia/piedras')return viewGuiaPiedras();
   if((m=h.match(/^#\/pedido\/(\d+)\/(\w+)$/)))return viewOrder(m[1],m[2]);
   return viewHome();
 }
-function setApp(html){$('#app').innerHTML=html;window.scrollTo(0,0);}
+function setApp(html){$('#app').innerHTML=html;window.scrollTo({top:0,behavior:'instant'});}
 
 function viewHome(){
   if($('#q').value)$('#q').value='';
   const ts=tops();
-  const destacados=pickFeatured(10);
+  const destacados=pickFeatured(10);setTitle('');
+  const H=META.hero||{};
+  const vistos=seen.map(id=>BYID.get(id)).filter(Boolean).slice(0,6);
   setApp(
-   '<section class="hero"><div class="wrap"><div><h1>Transformá tu espacio,<br>elevá tus sentidos</h1><p>'+esc(META.tagline||'')+'. Fragancias, sahumos, piedras y decoración para armonizar tu hogar.</p><a class="btn pri" href="#/c/todos">Ver todos los productos</a></div><div class="logo"><img src="logo.png" alt=""></div></div></section>'+
+   '<section class="hero"><div class="wrap"><div><h1>'+(H.titulo?esc(H.titulo):'Transformá tu espacio,<br>elevá tus sentidos')+'</h1><p>'+esc(H.texto||((META.tagline||'')+'. Fragancias, sahumos, piedras y decoración para armonizar tu hogar.'))+'</p><a class="btn pri" href="#/c/todos">Ver todos los productos</a></div><div class="logo"><img src="logo.png" alt=""></div></div></section>'+
    '<div class="wrap"><div class="perks"><div class="perk"><div class="ic">💳</div><div><b>Pagá con Mercado Pago</b><small>Tarjeta, débito o dinero en cuenta</small></div></div>'+
    '<div class="perk"><div class="ic">📦</div><div><b>Envíos a todo el país</b><small>'+(gratisDesde()?'Gratis desde '+money(gratisDesde()):'Moto en AMBA y Correo Argentino')+'</small></div></div>'+
    '<div class="perk"><div class="ic">🏠</div><div><b>Retiro sin cargo</b><small>Coordinamos día y horario</small></div></div></div>'+
    '<div class="guides"><a class="guide" href="#/guia/sahumerios"><div class="gi">🪔</div><div><b>Cómo elegir tu sahumerio</b><small>Según lo que buscás: limpiar, relajarte, atraer abundancia o armonizar.</small></div><span class="go">→</span></a>'+
    '<a class="guide" href="#/guia/piedras"><div class="gi">💎</div><div><b>Piedras y dijes</b><small>Qué representa cada piedra y el significado de cada símbolo.</small></div><span class="go">→</span></a></div>'+
    '<div class="sec-h"><h2>Categorías</h2></div><div class="tiles">'+ts.map(t=>{const list=ALL.filter(p=>p.top===t);const rep=list.find(p=>avail(p))||list[0];return '<a class="tile" href="#/c/'+slug(t)+'"><div class="ti" style="'+imgStyle(rep)+'"></div><div class="tn">'+esc(t)+'<small>'+list.length+' productos</small></div></a>';}).join('')+'</div>'+
-   '<div class="sec-h"><h2>Destacados</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid">'+destacados.map(card).join('')+'</div>'+
+   (ALL.some(p=>p.of&&avail(p))?'<div class="sec-h"><h2>Ofertas</h2><a href="#/ofertas">Ver todas →</a></div><div class="grid">'+ALL.filter(p=>p.of&&avail(p)).slice(0,5).map(card).join('')+'</div>':'')+
+   '<div class="sec-h"><h2>Destacados</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid">'+destacados.filter(p=>!p.of).map(card).join('')+'</div>'+
+   (vistos.length?'<div class="recent"><div class="sec-h"><h2>Vistos recientemente</h2></div><div class="grid">'+vistos.map(card).join('')+'</div></div>':'')+
    ts.slice(0,3).map(t=>{const l=ALL.filter(p=>p.top===t&&avail(p)).slice(0,5);if(!l.length)return'';return '<div class="sec-h"><h2>'+esc(t)+'</h2><a href="#/c/'+slug(t)+'">Ver todo →</a></div><div class="grid">'+l.map(card).join('')+'</div>';}).join('')+
    '</div>');
   bindAdds($('#app'));
@@ -380,7 +450,8 @@ function pickFeatured(n){
   return of.concat(rest).slice(0,n);
 }
 
-let listState={sort:'rel',page:1};
+let listState={sort:'rel',page:1,precio:'',stock:false};
+const PRANGES=[['','Todos los precios'],['0-5000','Hasta $5.000'],['5000-10000','$5.000 a $10.000'],['10000-20000','$10.000 a $20.000'],['20000-','Más de $20.000']];
 function viewList(f){
   let title='Todos los productos', list=ALL, crumbs='<a href="#/">Inicio</a>', subs=[], topName=null;
   if(f.cat&&f.cat!=='todos'){topName=tops().find(t=>slug(t)===f.cat);list=ALL.filter(p=>p.top===topName);title=topName||'Categoría';crumbs+=' › '+(f.sub?'<a href="#/c/'+f.cat+'">'+esc(title)+'</a>':esc(title));subs=[...new Set(list.map(p=>p.sub).filter(Boolean))].sort();
@@ -389,7 +460,10 @@ function viewList(f){
   else if(f.cat==='todos'){const a=document.querySelector('#nav a[data-k="todos"]');if(a)a.classList.add('on');}
   if(f.ofertas){list=ALL.filter(p=>p.of);title='Ofertas';const a=document.querySelector('#nav a[data-k="ofertas"]');if(a)a.classList.add('on');}
   if(f.q){const words=norm(f.q).split(/\s+/).filter(Boolean);list=ALL.filter(p=>{if(f.tops&&!f.tops.includes(p.top))return false;const hay=norm(p.n+' '+p.top+' '+(p.sub||''));return words.every(w=>hay.includes(w));});title=(f.tops?'Sahumerios: ':'Resultados para “')+f.q+(f.tops?'':'”');if($('#q').value!==f.q)$('#q').value=f.q;}
-  const key=location.hash;if(listState.key!==key){listState={sort:listState.sort,page:1,key};}
+  const key=location.hash;if(listState.key!==key){listState={sort:listState.sort,page:1,key,precio:listState.precio,stock:listState.stock};}
+  setTitle(title);
+  if(listState.precio){const [lo,hi]=listState.precio.split('-').map(x=>x===''?null:+x);list=list.filter(p=>{const v=priceOf(p);return (lo==null||v>=lo)&&(hi==null||v<=hi);});}
+  if(listState.stock)list=list.filter(avail);
   const sorted=list.slice();
   const s=listState.sort;
   if(s==='asc')sorted.sort((a,b)=>priceOf(a)-priceOf(b));else if(s==='desc')sorted.sort((a,b)=>priceOf(b)-priceOf(a));else if(s==='az')sorted.sort((a,b)=>a.n.localeCompare(b.n,'es'));
@@ -397,10 +471,12 @@ function viewList(f){
   const per=24*listState.page;
   setApp('<div class="wrap"><div class="listhead"><div class="crumbs">'+crumbs+'</div><h1>'+esc(title)+'</h1></div>'+
     '<div class="filters">'+(subs.length>1?'<a class="pill'+(f.sub?'':' on')+'" href="#/c/'+f.cat+'">Todo</a>'+subs.map(x=>'<a class="pill'+(slug(x)===f.sub?' on':'')+'" href="#/c/'+f.cat+'/'+slug(x)+'">'+esc(x)+'</a>').join(''):'')+
-    '<span class="sp"></span><span class="rescount">'+list.length+' productos</span><select id="sort"><option value="rel">Ordenar: destacados</option><option value="asc">Menor precio</option><option value="desc">Mayor precio</option><option value="az">A – Z</option></select></div>'+
+    '<span class="sp"></span><button class="pill tg'+(listState.stock?' on':'')+'" id="stkTg">'+(listState.stock?'✓ ':'')+'Solo con stock</button><select class="priceSel" id="prSel">'+PRANGES.map(r=>'<option value="'+r[0]+'">'+r[1]+'</option>').join('')+'</select><span class="rescount">'+list.length+' productos</span><select id="sort"><option value="rel">Ordenar: destacados</option><option value="asc">Menor precio</option><option value="desc">Mayor precio</option><option value="az">A – Z</option></select></div>'+
     (sorted.length?'<div class="grid">'+sorted.slice(0,per).map(card).join('')+'</div>':'<div class="empty">No encontramos productos. Probá con otra palabra 🌿</div>')+
     (sorted.length>per?'<div class="more"><button class="btn ghost" id="moreBtn">Ver más productos ('+(sorted.length-per)+')</button></div>':'')+'</div>');
   $('#sort').value=s;$('#sort').onchange=e=>{listState.sort=e.target.value;listState.page=1;viewList(f);};
+  $('#prSel').value=listState.precio;$('#prSel').onchange=e=>{listState.precio=e.target.value;listState.page=1;viewList(f);};
+  $('#stkTg').onclick=()=>{listState.stock=!listState.stock;listState.page=1;viewList(f);};
   const mb=$('#moreBtn');if(mb)mb.onclick=()=>{const y=window.scrollY;listState.page++;viewList(f);window.scrollTo(0,y);};
   bindAdds($('#app'));
 }
@@ -409,15 +485,17 @@ function viewProduct(id){
   const p=BYID.get(id);if(!p){setApp('<div class="wrap empty">Este producto ya no está disponible. <a href="#/c/todos"><u>Ver otros productos</u></a></div>');return;}
   const a=avail(p), mx=maxQty(p), s=STOCK[p.id];let q=1;
   const rel=ALL.filter(x=>x.id!==p.id&&x.top===p.top&&(x.sub===p.sub)&&avail(x)).slice(0,5);
+  setTitle(p.n);seen=[p.id].concat(seen.filter(x=>x!==p.id)).slice(0,12);saveLS(SEEN_KEY,seen);
   const st=!a?'<span class="bad">● Sin stock</span>':s!=null&&s<=5?'<span class="warn">● ¡Quedan '+s+'!</span>':'<span class="ok">● En stock</span>';
-  setApp('<div class="wrap"><div class="pp"><div class="pimg">'+(p.of?'<span class="badge of">Oferta</span>':'')+'<div class="imgbox" style="'+imgStyle(p)+'"></div></div><div>'+
+  setApp('<div class="wrap"><div class="pp"><div class="pimg">'+(p.of?'<span class="badge pct" style="right:auto;left:14px;top:14px">-'+pct(p)+'%</span>':'')+'<div class="imgbox" style="'+imgStyle(p)+'"></div>'+favIcon(p.id)+'</div><div>'+
     '<div class="crumbs"><a href="#/">Inicio</a> › <a href="#/c/'+slug(p.top)+'">'+esc(p.top)+'</a>'+(p.sub?' › <a href="#/c/'+slug(p.top)+'/'+slug(p.sub)+'">'+esc(p.sub)+'</a>':'')+'</div>'+
-    '<h1>'+esc(p.n)+'</h1><div class="price">'+priceHtml(p)+'</div><div class="stockline">'+st+'</div>'+
+    '<h1>'+esc(p.n)+'</h1><div class="price">'+priceHtml(p)+'</div>'+(p.of?'<div class="note" style="color:var(--green);margin-top:4px">Ahorrás '+money(p.p-p.of)+'</div>':'')+'<div class="stockline">'+st+'</div>'+
     (a?'<div class="qtyrow"><div class="qty"><button id="qm">−</button><span id="qv">1</span><button id="qp">+</button></div><button class="btn sage" id="addP" style="flex:1;min-width:200px">Agregar al carrito</button></div><button class="btn pri block" id="buyP">Comprar ahora</button>':
       '<a class="btn wa block" target="_blank" rel="noopener" href="https://wa.me/'+META.whatsapp+'?text='+encodeURIComponent('¡Hola! Quería saber cuándo vuelve a entrar: '+p.n)+'">Avisame cuando vuelva (WhatsApp)</a>')+
     '<div class="info"><div><span>💳</span><span>Pagá con <b>Mercado Pago</b>: tarjeta de crédito, débito o dinero en cuenta.</span></div>'+
     '<div><span>📦</span><span style="flex:1"><b>Calculá el envío</b><div class="shipcalc"><input id="cpIn" inputmode="numeric" maxlength="8" placeholder="Tu código postal"><button class="btn ghost" id="cpBtn" style="padding:10px 16px">Calcular</button></div><div class="shipres" id="cpRes"></div></span></div>'+
-    '<div><span>🏠</span><span>Retiro sin cargo coordinando por WhatsApp.</span></div></div>'+
+    '<div><span>🏠</span><span>Retiro sin cargo coordinando por WhatsApp.</span></div>'+(META.regalo&&META.regalo.activo?'<div><span>🎁</span><span>¿Es para regalar? Lo preparamos envuelto'+(META.regalo.precio?' (+'+money(META.regalo.precio)+')':'')+' con tu mensaje.</span></div>':'')+'</div>'+
+    '<div class="share"><button id="shareBtn">🔗 Compartir</button><a target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(p.n+' — '+money(priceOf(p))+'\n'+location.href.split('#')[0]+'#/p/'+p.id)+'">💬 Enviar por WhatsApp</a><a target="_blank" rel="noopener" href="https://wa.me/'+META.whatsapp+'?text='+encodeURIComponent('¡Hola! Tengo una consulta sobre: '+p.n)+'">❓ Consultar</a></div>'+
     '</div></div>'+(rel.length?'<div class="sec-h"><h2>También te puede gustar</h2></div><div class="grid">'+rel.map(card).join('')+'</div>':'')+'</div>');
   if(a){
     $('#qm').onclick=()=>{q=Math.max(1,q-1);$('#qv').textContent=q;};
@@ -425,6 +503,7 @@ function viewProduct(id){
     $('#addP').onclick=()=>addToCart(p.id,q);
     $('#buyP').onclick=()=>{addToCart(p.id,q,true);location.hash='#/checkout';};
   }
+  $('#shareBtn').onclick=async()=>{const url=location.href.split('#')[0]+'#/p/'+p.id;try{if(navigator.share){await navigator.share({title:p.n,text:p.n+' — '+money(priceOf(p)),url});return;}}catch(e){return;}try{await navigator.clipboard.writeText(url);toast('Link copiado 📋');}catch(e){prompt('Copiá el link:',url);}};
   const cpSaved=loadLS(CUST_KEY,{}).cp;if(cpSaved)$('#cpIn').value=cpSaved;
   $('#cpBtn').onclick=()=>quoteInto($('#cpIn').value,[{id:p.id,q:1}],$('#cpRes'));
   bindAdds($('#app'));
@@ -472,6 +551,7 @@ function waOrderLink(){let t='¡Hola Anushka! 🌿 Quiero hacer este pedido:\n\n
 
 /* ============ checkout ============ */
 function viewCheckout(){
+  setTitle('Finalizar compra');
   const L=cartLines();
   if(!L.length){setApp('<div class="wrap empty">Tu carrito está vacío.<br><br><a class="btn pri" href="#/c/todos">Ver productos</a></div>');return;}
   if(!API){setApp('<div class="wrap empty">El pago online todavía no está activo.<br><br><a class="btn wa" target="_blank" rel="noopener" href="'+waOrderLink()+'">Enviar pedido por WhatsApp</a></div>');return;}
@@ -486,11 +566,14 @@ function viewCheckout(){
       '<div id="addr" style="display:none;margin-top:16px"><div class="f">'+fld('calle','Calle','text',c.calle,'','address-line1')+fld('numero','Número','text',c.numero,'')+fld('piso','Piso / depto (opcional)','text',c.piso,'')+fld('ciudad','Localidad','text',c.ciudad,'','address-level2')+
         '<div class="fld full"><label for="f_provincia">Provincia</label><select id="f_provincia">'+PROVS.map(x=>'<option'+(x===(c.provincia||'Buenos Aires')?' selected':'')+'>'+x+'</option>').join('')+'</select></div></div></div>'+
     '</div>'+
+    (META.regalo&&META.regalo.activo?'<div class="box"><h2>🎁 ¿Es para regalo?</h2><label class="chk"><input type="checkbox" id="f_regalo"'+(loadLS('anushka_regalo',{}).on?' checked':'')+'><span>Quiero que lo envuelvan para regalo'+(META.regalo.precio?' (+'+money(META.regalo.precio)+')':' (sin cargo)')+'</span></label><div class="fld" id="regMsgBox" style="margin-top:10px;display:none"><label for="f_regmsg">Mensaje para la tarjeta (opcional)</label><textarea id="f_regmsg" rows="2" maxlength="300" placeholder="Ej: ¡Feliz cumple, Ana! 🌿"></textarea></div></div>':'')+
     '<div class="box"><h2><span class="num">3</span>Pago</h2><div class="opt on"><input type="radio" checked><div class="t"><b>Mercado Pago</b><small>Tarjeta de crédito, débito, dinero en cuenta o efectivo en Rapipago / Pago Fácil</small></div></div>'+
       '<div class="fld" style="margin-top:14px"><label for="f_nota">Nota para la tienda (opcional)</label><textarea id="f_nota" rows="2" maxlength="500" placeholder="Ej: es para regalo, horario de entrega…"></textarea></div></div>'+
-    '</div><div class="summary"><div class="box"><h2>Resumen</h2><div id="sumItems"></div><div style="border-top:1px solid var(--line);margin:10px 0;padding-top:10px" id="sumTot"></div>'+
+    '</div><div class="summary"><div class="box"><h2>Resumen</h2><div id="sumItems"></div><div id="cupBox" style="border-top:1px solid var(--line);margin-top:10px;padding-top:10px"></div><div style="border-top:1px solid var(--line);margin:10px 0;padding-top:10px" id="sumTot"></div>'+
       '<button class="btn mp block" id="payBtn">Pagar con Mercado Pago</button><p class="note" style="text-align:center;margin:10px 0 0">Vas a ser redirigido a Mercado Pago para pagar de forma segura.</p></div></div></div></div>');
-  renderSummary();
+  renderCoupon();renderSummary();
+  const rg=$('#f_regalo');if(rg){const upd=()=>{$('#regMsgBox').style.display=rg.checked?'':'none';saveLS('anushka_regalo',{on:rg.checked});renderSummary();};rg.onchange=upd;upd();}
+  if(cupon)revalidateCoupon();
   const go=()=>loadShip();
   $('#cpGo').onclick=go;$('#f_cp').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go();}});
   if(c.cp)go();
@@ -517,11 +600,21 @@ async function loadShip(){
   }catch(e){box.innerHTML='<div class="alert">No pudimos calcular el envío. Probá de nuevo.</div>';}
 }
 function apiItems(){return cartLines().map(l=>({id:l.p.id,q:l.q}));}
+function giftCost(){const rg=$('#f_regalo');return rg&&rg.checked?Math.round((META.regalo&&META.regalo.precio)||0):0;}
+function renderCoupon(){const b=$('#cupBox');if(!b)return;
+  if(cupon){b.innerHTML='<div class="cupok"><span>🏷 Cupón <b>'+esc(cupon.code)+'</b> aplicado ('+esc(cupon.label)+')</span><button id="cupRm">Quitar</button></div>';$('#cupRm').onclick=()=>{cupon=null;renderCoupon();renderSummary();};return;}
+  b.innerHTML='<details'+(b.dataset.open?' open':'')+'><summary style="cursor:pointer;font-size:13.5px;color:var(--accent)">¿Tenés un cupón de descuento?</summary><div class="cuprow"><input id="cupIn" placeholder="CÓDIGO" maxlength="30"><button class="btn ghost" id="cupGo" style="padding:10px 14px">Aplicar</button></div><div id="cupErr" class="note"></div></details>';
+  const go=async()=>{const code=$('#cupIn').value.trim();if(!code)return;$('#cupGo').disabled=true;
+    try{const r=await fetch(API+'/api/coupon',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({cupon:code,items:apiItems()})});const j=await r.json();if(!r.ok)throw new Error(j.error);cupon={code:j.code,descuento:j.descuento,label:j.label};toast('🏷 Cupón aplicado');renderCoupon();renderSummary();}
+    catch(e){b.dataset.open=1;$('#cupErr').innerHTML='<span class="bad">'+esc(e.message||'No pudimos validar el cupón')+'</span>';$('#cupGo').disabled=false;}};
+  $('#cupGo').onclick=go;$('#cupIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();go();}});}
+async function revalidateCoupon(){try{const r=await fetch(API+'/api/coupon',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({cupon:cupon.code,items:apiItems()})});const j=await r.json();if(!r.ok)throw new Error(j.error);cupon={code:j.code,descuento:j.descuento,label:j.label};}catch(e){cupon=null;toast('El cupón dejó de aplicar: '+(e.message||''),4000);}renderCoupon();renderSummary();}
 function renderSummary(){
   const L=cartLines(),sub=cartSubtotal();
   $('#sumItems').innerHTML=L.map(l=>'<div class="sitem"><div class="thumb" style="'+imgStyle(l.p)+'"><i>'+l.q+'</i></div><div class="n">'+esc(l.p.n)+'</div><b>'+money(priceOf(l.p)*l.q)+'</b></div>').join('');
   const sh=shipChoice?shipChoice.precio:null;
-  $('#sumTot').innerHTML='<div class="row"><span>Subtotal</span><span>'+money(sub)+'</span></div><div class="row"><span>Envío</span><span>'+(sh==null?'—':sh?money(sh):'Gratis')+'</span></div><div class="row big"><span>Total</span><span>'+money(sub+(sh||0))+'</span></div>';
+  const d=cupon?Math.min(cupon.descuento,sub):0, g=giftCost();
+  $('#sumTot').innerHTML='<div class="row"><span>Subtotal</span><span>'+money(sub)+'</span></div>'+(d?'<div class="row disc"><span>Descuento ('+esc(cupon.code)+')</span><span>−'+money(d)+'</span></div>':'')+'<div class="row"><span>Envío</span><span>'+(sh==null?'—':sh?money(sh):'Gratis')+'</span></div>'+($('#f_regalo')&&$('#f_regalo').checked?'<div class="row"><span>Envoltorio de regalo</span><span>'+(g?money(g):'Gratis')+'</span></div>':'')+'<div class="row big"><span>Total</span><span>'+money(sub-d+(sh||0)+g)+'</span></div>';
 }
 function fixProblems(probs){
   const msgs=[];probs.forEach(pr=>{const p=BYID.get(pr.id);const name=pr.n||(p&&p.n)||'Un producto';if(pr.max>0){cart[pr.id]=pr.max;STOCK[pr.id]=pr.max;}else{delete cart[pr.id];if(p)STOCK[pr.id]=0;}msgs.push(name+': '+pr.motivo);});
@@ -544,10 +637,10 @@ async function pay(){
   if(errs.length){$('#coErr').innerHTML='<div class="alert">'+errs.map(esc).join('<br>')+'</div>';window.scrollTo({top:0,behavior:'smooth'});return;}
   const btn=$('#payBtn');btn.disabled=true;btn.innerHTML='<span class="spin"></span> Conectando con Mercado Pago…';
   try{
-    const r=await fetch(API+'/api/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({items:apiItems(),customer:cust,ship:{opcion:shipChoice.id,cp:cust.cp,calle:cust.calle,numero:cust.numero,piso:cust.piso,ciudad:cust.ciudad,provincia:cust.provincia},nota:v('nota')})});
+    const r=await fetch(API+'/api/checkout',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({items:apiItems(),customer:cust,ship:{opcion:shipChoice.id,cp:cust.cp,calle:cust.calle,numero:cust.numero,piso:cust.piso,ciudad:cust.ciudad,provincia:cust.provincia},nota:v('nota'),cupon:cupon?cupon.code:undefined,regalo:!!($('#f_regalo')&&$('#f_regalo').checked),regaloMsg:v('regmsg')})});
     const j=await r.json();
     if(r.status===409&&j.problemas){fixProblems(j.problemas);await loadShip();throw new Error('Revisá tu carrito y volvé a tocar Pagar.');}
-    if(!r.ok)throw new Error(j.error||'Error');
+    if(!r.ok){if(cupon&&/cup[oó]n/i.test(j.error||'')){cupon=null;renderCoupon();renderSummary();}throw new Error(j.error||'Error');}
     saveLS('anushka_last_order',{id:j.id,t:j.token});
     location.href=j.init_point;
   }catch(e){btn.disabled=false;btn.textContent='Pagar con Mercado Pago';$('#coErr').innerHTML='<div class="alert">'+esc(e.message)+'</div>';window.scrollTo({top:0,behavior:'smooth'});}
@@ -555,6 +648,7 @@ async function pay(){
 
 /* ============ estado del pedido ============ */
 async function viewOrder(id,t,paymentId){
+  setTitle('Tu pedido');
   setApp('<div class="wrap loading">Buscando tu pedido…</div>');
   if(!API){setApp('<div class="wrap empty">No se pudo consultar el pedido.</div>');return;}
   try{
@@ -574,7 +668,7 @@ async function viewOrder(id,t,paymentId){
       (paid&&o.estado!=='cancelado'?'<div class="steps">'+flow.map((s,i)=>'<div class="step'+(i<=idx?' done':'')+'"><i>'+(i<=idx?'✓':i+1)+'</i>'+lbl[s]+'</div>').join('')+'</div>':'')+
       (o.tracking?'<div class="alert info" style="margin-top:14px">Código de seguimiento: <b>'+esc(o.tracking)+'</b></div>':'')+
       '<div class="box" style="margin-top:18px"><h2>Pedido #'+o.pedido+'</h2>'+o.items.map(l=>'<div class="row"><span>'+l.q+' × '+esc(l.n)+'</span><span>'+money(l.p*l.q)+'</span></div>').join('')+
-      '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px"><div class="row"><span>'+esc(o.entrega.nombre)+'</span><span>'+(o.envio?money(o.envio):'Gratis')+'</span></div><div class="row big"><span>Total</span><span>'+money(o.total)+'</span></div></div>'+
+      '<div style="border-top:1px solid var(--line);margin-top:8px;padding-top:8px">'+(o.descuento?'<div class="row disc"><span>Descuento'+(o.cupon?' ('+esc(o.cupon)+')':'')+'</span><span>−'+money(o.descuento)+'</span></div>':'')+(o.regalo?'<div class="row"><span>🎁 Envoltorio de regalo</span><span>'+(o.regalo.costo?money(o.regalo.costo):'Gratis')+'</span></div>':'')+'<div class="row"><span>'+esc(o.entrega.nombre)+'</span><span>'+(o.envio?money(o.envio):'Gratis')+'</span></div><div class="row big"><span>Total</span><span>'+money(o.total)+'</span></div></div>'+
       (o.entrega.detalle?'<p class="note">'+esc(o.entrega.detalle)+'</p>':'')+'</div>'+
       '<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+META.whatsapp+'?text='+encodeURIComponent('¡Hola! Te escribo por mi pedido #'+o.pedido)+'">Consultar por WhatsApp</a> <a class="btn ghost" href="'+location.pathname+'#/">Seguir comprando</a>'+
       '<p class="note" style="margin-top:16px">Guardá este link para ver el estado de tu pedido.</p></div></div>');
@@ -582,10 +676,26 @@ async function viewOrder(id,t,paymentId){
   }catch(e){setApp('<div class="wrap empty">No encontramos el pedido. Si ya pagaste, escribinos por <a href="https://wa.me/'+META.whatsapp+'" target="_blank"><u>WhatsApp</u></a>.</div>');}
 }
 
+/* ============ favoritos / seguimiento ============ */
+function viewFavs(){setTitle('Mis favoritos');
+  const L=favs.map(id=>BYID.get(id)).filter(Boolean);
+  setApp('<div class="wrap"><div class="listhead"><div class="crumbs"><a href="#/">Inicio</a> › Favoritos</div><h1>Mis favoritos</h1></div>'+
+    (L.length?'<p class="note" style="margin:6px 0 16px">Se guardan en este dispositivo. '+(L.some(avail)?'<a href="#" id="favAll" style="color:var(--accent);text-decoration:underline">Agregar todos al carrito</a>':'')+'</p><div class="grid">'+L.map(card).join('')+'</div>':'<div class="empty">Todavía no guardaste favoritos.<br>Tocá el ❤ en los productos que te gusten.<br><br><a class="btn pri" href="#/c/todos">Ver productos</a></div>')+'</div>');
+  bindAdds($('#app'));const fa=$('#favAll');if(fa)fa.onclick=e=>{e.preventDefault();L.filter(avail).forEach(p=>{if(!cart[p.id])cart[p.id]=1;});saveLS(CART_KEY,cart);updateCount();renderCart();openCart(true);};
+}
+function viewTrack(){setTitle('Seguí tu pedido');
+  setApp('<div class="wrap"><div class="track"><div class="listhead" style="text-align:center"><h1>Seguí tu pedido</h1><p class="note">Ingresá el número de pedido y el email con el que compraste.</p></div><div class="box"><div id="trErr"></div><div class="f">'+fld('tped','Número de pedido','text','','full')+fld('tmail','Email','email',loadLS(CUST_KEY,{}).email||'','full','email')+'</div><button class="btn pri block" id="trGo" style="margin-top:14px">Ver estado del pedido</button></div></div></div>');
+  const go=async()=>{if(!API){$('#trErr').innerHTML='<div class="alert">Consultá el estado de tu pedido por WhatsApp.</div>';return;}const b=$('#trGo');b.disabled=true;
+    try{const r=await fetch(API+'/api/track',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({pedido:$('#f_tped').value,email:$('#f_tmail').value})});const j=await r.json();if(!r.ok)throw new Error(j.error);location.hash='#/pedido/'+j.id+'/'+j.token;}
+    catch(e){b.disabled=false;$('#trErr').innerHTML='<div class="alert">'+esc(e.message||'No pudimos buscar el pedido')+'</div>';}};
+  $('#trGo').onclick=go;$('#f_tmail').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+}
+
 /* ============ guías ============ */
 function gtags(list,base){return '<div class="tags">'+list.map(t=>'<a href="'+(t[1]&&t[1][0]==='#'?t[1]:(base||'#/buscar/')+encodeURIComponent(t[1]||t[0]))+'">'+esc(t[0])+'</a>').join('')+'</div>';}
 function gcard(ic,t,p,tags,base){return '<div class="gcard"><h3><span>'+ic+'</span>'+esc(t)+'</h3><p>'+p+'</p>'+(tags?gtags(tags,base):'')+'</div>';}
 function guideShell(title,intro,body){
+  setTitle(title);
   setApp('<div class="wrap"><div class="listhead"><div class="crumbs"><a href="#/">Inicio</a> › Guías</div><h1>'+title+'</h1></div><p class="gintro">'+intro+'</p>'+body+
   '<p class="gnote">Los significados son los que tradicionalmente se asocian a cada aroma, piedra o símbolo dentro de las prácticas holísticas. Son una guía para elegir con intención, no reemplazan ninguna consulta profesional.</p>'+
   '<div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap"><a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+META.whatsapp+'?text='+encodeURIComponent('¡Hola Anushka! Quería que me ayuden a elegir 🌿')+'">¿Dudas? Te asesoramos por WhatsApp</a><a class="btn ghost" href="#/">Volver al inicio</a></div></div>');
@@ -645,6 +755,7 @@ function viewGuiaPiedras(){
 }
 
 function viewHelp(){
+  setTitle('Cómo comprar');
   setApp('<div class="wrap" style="max-width:760px"><div class="listhead"><div class="crumbs"><a href="#/">Inicio</a> › Cómo comprar</div><h1>Cómo comprar</h1></div>'+
   '<div class="box"><h2><span class="num">1</span>Elegí tus productos</h2><p class="note">Agregalos al carrito con la cantidad que quieras.</p></div>'+
   '<div class="box"><h2><span class="num">2</span>Elegí cómo recibirlo</h2><p class="note">Ingresá tu código postal y elegí: retiro sin cargo, envío en moto (AMBA) o Correo Argentino a todo el país.</p></div>'+
