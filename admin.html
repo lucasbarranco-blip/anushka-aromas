@@ -68,6 +68,7 @@ a{color:var(--accent)}
 .tab .nb{background:var(--red);color:#fff;border-radius:10px;font-size:11px;padding:1px 7px;margin-left:5px}
 .qtyInput{width:62px;padding:6px 7px;border:1px solid var(--line);border-radius:7px;font-size:13px;text-align:center;margin-left:6px}
 .qtyInput.changed,.ofInput.changed{border-color:var(--sage);background:#f2f7ee}
+.tagSel{margin-top:5px;font:inherit;font-size:12px;padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--muted)}.tagSel.on{border-color:var(--sage);color:var(--ink);background:#f2f7ee}
 .ofInput{width:92px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;font-size:13.5px;text-align:right}
 .ord{background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
 .ord .oh{display:flex;gap:12px;align-items:center;padding:13px 16px;cursor:pointer;flex-wrap:wrap}
@@ -266,7 +267,7 @@ function render(){
     const tr=document.createElement('tr');if(!p.visible)tr.className='hidden-row';
     tr.innerHTML=
       '<td><div class="thumb-wrap"><div class="athumb" data-photo="'+p.id+'" style="'+imgStyle(p)+'"></div><span class="cam">📷</span></div></td>'+
-      '<td><div class="pname">'+p.n+(p._new?'<span class="pnew">nuevo</span>':'')+'</div><div class="pcat">'+p.top+(p.sub?' › '+p.sub:'')+'</div></td>'+
+      '<td><div class="pname">'+p.n+(p._new?'<span class="pnew">nuevo</span>':'')+'</div><div class="pcat">'+p.top+(p.sub?' › '+p.sub:'')+'</div><select class="tagSel'+(p.tag?' on':'')+'" data-tag="'+p.id+'" title="Etiqueta que se ve en la tienda">'+['','Más vendido','Nuevo','Recomendado','Edición limitada'].map(t=>'<option value="'+t+'"'+((p.tag||'')===t?' selected':'')+'>'+(t||'Sin etiqueta')+'</option>').join('')+'</select></td>'+
       '<td style="text-align:right"><input class="priceInput" inputmode="numeric" value="'+p.p+'" data-id="'+p.id+'"></td>'+
       '<td style="text-align:right" class="hide-m"><input class="ofInput'+(p._ofc?' changed':'')+'" inputmode="numeric" placeholder="—" value="'+(p.of||'')+'" data-of="'+p.id+'"></td>'+
       '<td style="white-space:nowrap"><span class="tgl'+(p.stock?' on':'')+'" data-stk="'+p.id+'"><span class="sw"></span>'+(p.stock?'En stock':'Sin stock')+'</span>'+(API&&p.stock?'<input class="qtyInput'+(stockDirty[p.id]!==undefined?' changed':'')+'" inputmode="numeric" placeholder="∞" title="Cantidad disponible. Vacío = sin control de cantidad" value="'+qtyVal(p.id)+'" data-qty="'+p.id+'">':'')+'</td>'+
@@ -274,6 +275,7 @@ function render(){
     tb.appendChild(tr);
   });
   tb.querySelectorAll('.priceInput').forEach(inp=>inp.addEventListener('input',()=>{const id=inp.dataset.id;const p=PRODUCTS.find(x=>''+x.id===id);p.p=parseInt(inp.value.replace(/\D/g,''))||0;inp.classList.add('changed');markDirty(id);}));
+  tb.querySelectorAll('[data-tag]').forEach(sel=>sel.addEventListener('change',()=>{const id=sel.dataset.tag;const p=PRODUCTS.find(x=>''+x.id===id);if(sel.value)p.tag=sel.value;else delete p.tag;sel.classList.toggle('on',!!sel.value);markDirty(id);}));
   tb.querySelectorAll('[data-of]').forEach(inp=>inp.addEventListener('input',()=>{const id=inp.dataset.of;const p=PRODUCTS.find(x=>''+x.id===id);p.of=parseInt(inp.value.replace(/\D/g,''))||0;p._ofc=1;inp.classList.add('changed');markDirty(id);}));
   tb.querySelectorAll('[data-qty]').forEach(inp=>inp.addEventListener('input',()=>{const id=inp.dataset.qty;const v=inp.value.replace(/\D/g,'');stockDirty[id]=v===''?null:parseInt(v);inp.classList.add('changed');markDirty(id);}));
   tb.querySelectorAll('[data-stk]').forEach(el=>el.addEventListener('click',()=>{const id=el.dataset.stk;const p=PRODUCTS.find(x=>''+x.id===id);p.stock=p.stock?0:1;markDirty(id);render();}));
