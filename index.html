@@ -246,6 +246,43 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 .gstep{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px}
 .gstep b{display:block;font-size:14px;color:var(--accent-d);margin-bottom:4px}
 .gstep span{font-size:13px;color:var(--muted);line-height:1.5}
+.qz{max-width:860px;margin:0 auto;padding:26px 0 10px}
+.qz .qh{text-align:center;margin-bottom:18px}
+.qz .qh h1{font-family:Lora,serif;font-size:30px;color:var(--accent-d);margin:6px 0 6px;font-weight:600}
+.qz .qh p{color:var(--accent);margin:0;font-size:14.5px}
+.qbar{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:18px auto 6px;max-width:420px}
+.qbar i{display:block;height:100%;background:var(--sage);transition:width .35s}
+.qstep{font-size:12px;color:var(--muted);text-align:center;letter-spacing:.6px;text-transform:uppercase}
+.qq{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px 22px;margin-top:14px;animation:qin .3s ease}
+@keyframes qin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.qq h2{font-family:Lora,serif;font-size:23px;color:var(--accent-d);margin:0 0 4px;font-weight:600;text-align:center}
+.qq .qsub{text-align:center;color:var(--muted);font-size:13.5px;margin:0 0 18px}
+.qopts{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.qo{border:1.5px solid var(--line);background:var(--card);border-radius:14px;padding:16px 14px;cursor:pointer;text-align:left;display:flex;gap:12px;align-items:flex-start;transition:.15s;font:inherit;color:inherit}
+.qo:hover{border-color:var(--gold);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,.06)}
+.qo.on{border-color:var(--accent-d);background:#faf4ec;box-shadow:0 0 0 1px var(--accent-d) inset}
+.qo .e{font-size:26px;line-height:1;flex:none}
+.qo b{display:block;font-size:14.5px;color:var(--accent-d);margin-bottom:2px}
+.qo small{color:var(--muted);font-size:12.5px;line-height:1.4;display:block}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:18px;gap:10px}
+.qback{background:none;border:none;color:var(--accent);cursor:pointer;font-size:14px;padding:8px 0}
+.qres .rh{text-align:center;margin-bottom:14px}
+.qres .rh .ic{font-size:40px}
+.qres .rh h2{font-family:Lora,serif;font-size:25px;color:var(--accent-d);margin:6px 0 4px}
+.qres .rh p{color:var(--accent);font-size:14px;margin:0;line-height:1.5}
+.ritem{display:flex;gap:14px;align-items:center;padding:12px;border:1px solid var(--line);border-radius:14px;margin-bottom:10px;background:var(--card);transition:.15s}
+.ritem.off{opacity:.45}
+.ritem input{width:20px;height:20px;accent-color:var(--accent-d);flex:none}
+.ritem .thumb{width:70px;height:70px;border-radius:10px}
+.ritem .rt{flex:1;min-width:0}
+.ritem .rt a{font-weight:600;font-size:14.5px;color:var(--accent-d)}
+.ritem .rt small{display:block;color:var(--muted);font-size:12.5px;margin-top:3px;line-height:1.4}
+.ritem .rt .tag{display:inline-block;font-size:11px;background:#efe5d6;color:var(--accent-d);border-radius:10px;padding:2px 8px;margin-top:5px;font-weight:600}
+.ritem .rp{font-weight:700;color:var(--accent-d);white-space:nowrap}
+.rtot{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:#faf4ec;border-radius:14px;padding:14px 16px;margin-top:6px}
+.rtot b{font-size:20px;color:var(--accent-d)}
+.rtip{font-size:13px;color:var(--accent);background:#f2f6ee;border:1px solid #d4e0ca;border-radius:12px;padding:12px 14px;margin:12px 0}
+@media(max-width:640px){.qq{padding:18px 14px}.qopts{grid-template-columns:1fr 1fr}.qo{flex-direction:column;gap:6px;padding:12px}.ritem .thumb{width:56px;height:56px}}
 .gnote{font-size:12.5px;color:var(--muted);margin:22px 0 0;line-height:1.5}
 @media (max-width:900px){.guides{grid-template-columns:1fr}}
 @media (max-width:900px){
@@ -291,7 +328,7 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
 <footer>
   <div class="wrap">
     <div><h4>Anushka Aromas</h4><p id="ftag">Tienda holística</p></div>
-    <div><h4>Comprá</h4><a href="#/c/todos">Todos los productos</a><a href="#/ofertas" id="fOf" style="display:none">Ofertas</a><a href="#/ayuda">Cómo comprar</a><a href="#/seguimiento">Seguí tu pedido</a><a href="#/favoritos">Mis favoritos</a><a href="#/guia/sahumerios">Guía de sahumerios</a><a href="#/guia/piedras">Guía de piedras y dijes</a></div>
+    <div><h4>Comprá</h4><a href="#/c/todos">Todos los productos</a><a href="#/ofertas" id="fOf" style="display:none">Ofertas</a><a href="#/ayuda">Cómo comprar</a><a href="#/seguimiento">Seguí tu pedido</a><a href="#/favoritos">Mis favoritos</a><a href="#/guia/sahumerios">Encontrá tu sahumerio</a><a href="#/guia/piedras">¿Qué piedra es para vos?</a><a href="#/guia/sahumerios/info">Guía de sahumerios</a><a href="#/guia/piedras/info">Significado de piedras</a></div>
     <div><h4>Contacto</h4><a id="fWa" href="#" target="_blank" rel="noopener">WhatsApp</a><a href="https://instagram.com/anushka_tienda_holistica" target="_blank" rel="noopener">Instagram</a></div>
   </div>
   <div class="legal">© <span id="yr"></span> Anushka Aromas · Pagos procesados por Mercado Pago</div>
@@ -414,8 +451,10 @@ function route(){
   if(h==='#/ayuda')return viewHelp();
   if(h==='#/favoritos')return viewFavs();
   if(h==='#/seguimiento')return viewTrack();
-  if(h==='#/guia/sahumerios')return viewGuiaSahumerios();
-  if(h==='#/guia/piedras')return viewGuiaPiedras();
+  if(h==='#/guia/sahumerios')return startQuiz('sah');
+  if(h==='#/guia/piedras')return startQuiz('pie');
+  if(h==='#/guia/sahumerios/info')return viewGuiaSahumerios();
+  if(h==='#/guia/piedras/info')return viewGuiaPiedras();
   if((m=h.match(/^#\/pedido\/(\d+)\/(\w+)$/)))return viewOrder(m[1],m[2]);
   return viewHome();
 }
@@ -432,8 +471,8 @@ function viewHome(){
    '<div class="wrap"><div class="perks"><div class="perk"><div class="ic">💳</div><div><b>Pagá con Mercado Pago</b><small>Tarjeta, débito o dinero en cuenta</small></div></div>'+
    '<div class="perk"><div class="ic">📦</div><div><b>Envíos a todo el país</b><small>'+(gratisDesde()?'Gratis desde '+money(gratisDesde()):'Moto en AMBA y Correo Argentino')+'</small></div></div>'+
    '<div class="perk"><div class="ic">🏠</div><div><b>Retiro sin cargo</b><small>Coordinamos día y horario</small></div></div></div>'+
-   '<div class="guides"><a class="guide" href="#/guia/sahumerios"><div class="gi">🪔</div><div><b>Cómo elegir tu sahumerio</b><small>Según lo que buscás: limpiar, relajarte, atraer abundancia o armonizar.</small></div><span class="go">→</span></a>'+
-   '<a class="guide" href="#/guia/piedras"><div class="gi">💎</div><div><b>Piedras y dijes</b><small>Qué representa cada piedra y el significado de cada símbolo.</small></div><span class="go">→</span></a></div>'+
+   '<div class="guides"><a class="guide" href="#/guia/sahumerios"><div class="gi">🪔</div><div><b>Encontrá tu sahumerio ideal</b><small>Respondé 4 preguntas y te armamos un kit a medida, listo para comprar.</small></div><span class="go">→</span></a>'+
+   '<a class="guide" href="#/guia/piedras"><div class="gi">💎</div><div><b>¿Qué piedra es para vos?</b><small>Contanos qué buscás y te recomendamos piedras y dijes con su significado.</small></div><span class="go">→</span></a></div>'+
    '<div class="sec-h"><h2>Categorías</h2></div><div class="tiles">'+ts.map(t=>{const list=ALL.filter(p=>p.top===t);const rep=list.find(p=>avail(p))||list[0];return '<a class="tile" href="#/c/'+slug(t)+'"><div class="ti" style="'+imgStyle(rep)+'"></div><div class="tn">'+esc(t)+'<small>'+list.length+' productos</small></div></a>';}).join('')+'</div>'+
    (ALL.some(p=>p.of&&avail(p))?'<div class="sec-h"><h2>Ofertas</h2><a href="#/ofertas">Ver todas →</a></div><div class="grid">'+ALL.filter(p=>p.of&&avail(p)).slice(0,5).map(card).join('')+'</div>':'')+
    '<div class="sec-h"><h2>Destacados</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid">'+destacados.filter(p=>!p.of).map(card).join('')+'</div>'+
@@ -689,6 +728,135 @@ function viewTrack(){setTitle('Seguí tu pedido');
     try{const r=await fetch(API+'/api/track',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({pedido:$('#f_tped').value,email:$('#f_tmail').value})});const j=await r.json();if(!r.ok)throw new Error(j.error);location.hash='#/pedido/'+j.id+'/'+j.token;}
     catch(e){b.disabled=false;$('#trErr').innerHTML='<div class="alert">'+esc(e.message||'No pudimos buscar el pedido')+'</div>';}};
   $('#trGo').onclick=go;$('#f_tmail').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
+}
+
+/* ============ asistentes interactivos ============ */
+const QZ={
+ sah:{titulo:'Encontrá tu sahumerio ideal',intro:'Respondé unas preguntas y te armamos un kit a tu medida.',info:'#/guia/sahumerios/info',
+  pasos:[
+   {k:'int',t:'¿Qué querés para tu espacio?',s:'Elegí la intención principal.',o:[
+     ['limpieza','🧹','Limpiar la energía','Después de una mudanza, una discusión o cuando el ambiente está “pesado”.'],
+     ['calma','🕊️','Calma y descanso','Bajar el ritmo, dormir mejor, relajarte.'],
+     ['proteccion','🙏','Protección','Cuidar tu hogar y a quienes lo habitan.'],
+     ['abundancia','💰','Abundancia','Abrir caminos, trabajo, un proyecto nuevo.'],
+     ['amor','❤️','Amor y armonía','Un clima cálido en pareja o en familia.'],
+     ['meditacion','🧘','Meditación','Conectar con vos, rezar, hacer yoga.']]},
+   {k:'fmt',t:'¿Qué formato te gusta?',s:'Si no sabés, elegí “Sorprendeme”.',o:[
+     ['varilla','🪵','Varillas','Las clásicas, aroma suave, 30–40 minutos.'],
+     ['sahumo','🌿','Sahumos de hierbas','Atados naturales, humo intenso para limpiar.'],
+     ['bombita','💣','Bombitas','Mucho humo en poco tiempo, ideales para defumar.'],
+     ['cono','🔺','Pirámides y geometría','Se encienden en la punta, aroma parejo.'],
+     ['resina','✨','Resinas naturales','Copal, mirra, olíbano: la forma más tradicional.'],
+     ['todo','🎲','Sorprendeme','Combinamos distintos formatos.']]},
+   {k:'porta',t:'¿Tenés dónde quemarlos?',s:'Cada formato necesita un soporte distinto.',o:[
+     ['si','✅','Sí, ya tengo','Solo quiero los aromas.'],
+     ['no','➕','No, sumame uno','Agregamos el porta ideal para tu formato.']]},
+   {k:'cant',t:'¿Cuánto querés llevar?',s:'Después podés destildar lo que no quieras.',o:[
+     ['1','🌱','Solo probar','1 producto ideal para tu intención.'],
+     ['3','🌿','Un kit','3 productos que se complementan.'],
+     ['5','🌳','Kit completo','5 productos + una piedra afín a tu intención.']]}]},
+ pie:{titulo:'¿Qué piedra es para vos?',intro:'Tres preguntas y te recomendamos tu piedra, con su significado.',info:'#/guia/piedras/info',
+  pasos:[
+   {k:'int',t:'¿Qué estás buscando?',s:'Elegí lo que más resuene con vos.',o:[
+     ['calma','💜','Calma','Paz interior, descanso, bajar la ansiedad del día.'],
+     ['proteccion','🖤','Protección','Alejar la mala energía y la envidia.'],
+     ['amor','💗','Amor','Amor propio, pareja, vínculos.'],
+     ['claridad','🤍','Claridad','Concentración, estudio, decisiones.'],
+     ['abundancia','🍀','Suerte y abundancia','Prosperidad, buenos comienzos.'],
+     ['espiritual','🌈','Espiritualidad','Intuición, chakras, conexión.']]},
+   {k:'tipo',t:'¿Cómo la querés llevar?',s:'',o:[
+     ['dije','📿','Dije','Para colgar en una cadena.'],
+     ['acc','💍','Pulsera, aros o anillo','Para usar todos los días.'],
+     ['piedra','🪨','Piedra para el hogar','Selenita, piedras en bruto o roladas.'],
+     ['todo','🎲','Me da igual','Mostrame lo mejor.']]},
+   {k:'para',t:'¿Para quién es?',s:'',o:[
+     ['yo','🙋','Para mí','Un mimo para vos.'],
+     ['regalo','🎁','Es un regalo','Te sugerimos cómo regalarlo.']]}]}
+};
+const QK={ // palabras clave por intención (más pesadas primero)
+ sah:{limpieza:['limpieza','salvia','ruda','copal','romero','7 hierbas','31 hierbas','defumacion','eucalipto','citronella','energia limpia'],
+  calma:['lavanda','manzanilla','sandalo','calendula','organicos'],
+  proteccion:['palo santo','mirra','ruda','incienso','7 elementos','benjui'],
+  abundancia:['canela','destrabar','benjui','citronella','naranja','anis','magicos','yagra'],
+  amor:['rosa','rosas','calendula','almizcle','vainilla'],
+  meditacion:['olibano','frankincense','tibetanos','7 chakras','incienso blanco','sandalo','mirra','ambar']},
+ pie:{calma:['amatista','aguamarina','agata','selenita','adularia'],
+  proteccion:['turmalina','shungita','turcos','ojitos turcos','metatron','arcangeles','alas','turmalinado','ojos turcos'],
+  amor:['corazon','esmeralda','rosa','nudo celta','mariposa'],
+  claridad:['cuarzo cristal','fluorita','cristal de roca','pendulo','cuarzo','labradorita'],
+  abundancia:['rana','suerte','piedra pi','tortuga','sol naciente','arbol de la vida','a viajar','cofrecito'],
+  espiritual:['7 chakras','chakras','metatron','serafinita','adularia','labradorita','pendulo','arbol de la vida','arcangeles']}
+};
+const QFMT={varilla:['Varilla','Tibetanos'],sahumo:['Sahumos','Linea Hierbas'],bombita:['Bombitas','Pastillas'],cono:['Piramides','Geometria'],resina:['Resina natural']};
+const QPORTA={varilla:['porta sahumerio mano','torre porta sahumerios','sahumador cuenco'],sahumo:['sahumador cuenco','porta palo santo'],bombita:['cascadas de humo','sahumador cuenco'],cono:['cascadas de humo','sahumador cuenco'],resina:['hornito','hornito salamandra'],todo:['sahumador cuenco','porta sahumerio mano']};
+const QSTONE={limpieza:'selenita',calma:'amatista',proteccion:'turmalina',abundancia:'rana',amor:'corazon',meditacion:'7 chakras'};
+const QTXT={limpieza:'Para renovar la energía: hierbas y resinas que tradicionalmente se usan para limpiar ambientes.',calma:'Aromas suaves que acompañan el descanso y los momentos de pausa.',proteccion:'Aromas que tradicionalmente se usan para cuidar el hogar.',abundancia:'Aromas asociados a abrir caminos y atraer buenas oportunidades.',amor:'Aromas florales y cálidos para armonizar los vínculos.',meditacion:'Resinas y aromas profundos para acompañar la meditación.',
+ claridad:'Piedras asociadas a la concentración y la claridad mental.',espiritual:'Piedras y símbolos asociados a la intuición y la conexión espiritual.'};
+const QTXT_P={calma:'Piedras asociadas a la calma y la serenidad.',proteccion:'Piedras y amuletos tradicionalmente usados para protección.',amor:'Piedras y símbolos asociados al amor y los vínculos.',abundancia:'Amuletos asociados a la buena fortuna y la prosperidad.'};
+const QMEAN=[['turmalinado','Une la claridad del cuarzo con la protección de la turmalina'],['turmalina','Una de las piedras de protección más conocidas'],['amatista','Asociada a la calma, la intuición y el buen descanso'],['aguamarina','Vinculada a la serenidad y la comunicación'],['agata','Asociada a la tranquilidad'],['selenita','Asociada a la limpieza energética y la paz'],['shungita','Asociada a la protección y el equilibrio'],['esmeralda','Piedra del corazón: amor y renovación'],['serafinita','Asociada a la conexión espiritual'],['adularia','Energía femenina y nuevos comienzos'],['labradorita','Intuición y transformación'],['fluorita','La piedra de la concentración'],['cristal de roca','La “piedra maestra” de la claridad'],['cuarzo cristal','La “piedra maestra” de la claridad'],['metatron','Geometría sagrada de protección y equilibrio'],['7 chakras','Armonía de los siete centros de energía'],['arbol de la vida','Conexión, familia y crecimiento'],['pendulo','Herramienta de radiestesia e intuición'],['arcangeles','Protección y guía espiritual'],['alas','Protección y guía espiritual'],['turcos','Amuleto contra la envidia y el mal de ojo'],['nudo celta','El vínculo eterno entre madre e hijo'],['piedra pi','Símbolo chino de buena fortuna'],['tortuga','Longevidad, paciencia y estabilidad'],['rana','Abundancia y prosperidad'],['suerte','Amuleto de buena suerte'],['corazon','Símbolo de amor y afecto'],['mariposa','Transformación y nuevos comienzos']];
+function qMean(p){const n=norm(p.n);const m=QMEAN.find(x=>n.includes(x[0]));return m?m[1]:null;}
+let qzState=null;
+function startQuiz(id){qzState={id,i:0,a:{}};renderQuiz();}
+function renderQuiz(){
+  const Z=QZ[qzState.id];setTitle(Z.titulo);
+  if(qzState.i>=Z.pasos.length)return renderQuizResult();
+  const P=Z.pasos[qzState.i], n=Z.pasos.length, sel=qzState.a[P.k];
+  setApp('<div class="wrap"><div class="qz"><div class="qh"><div class="crumbs"><a href="#/">Inicio</a> › Asistente</div><h1>'+Z.titulo+'</h1><p>'+Z.intro+'</p></div>'+
+    '<div class="qbar"><i style="width:'+Math.round(qzState.i/n*100)+'%"></i></div><div class="qstep">Paso '+(qzState.i+1)+' de '+n+'</div>'+
+    '<div class="qq"><h2>'+P.t+'</h2>'+(P.s?'<p class="qsub">'+P.s+'</p>':'<div style="height:14px"></div>')+'<div class="qopts">'+
+    P.o.map(o=>'<button class="qo'+(sel===o[0]?' on':'')+'" data-v="'+o[0]+'"><span class="e">'+o[1]+'</span><span><b>'+esc(o[2])+'</b><small>'+esc(o[3])+'</small></span></button>').join('')+'</div>'+
+    '<div class="qnav">'+(qzState.i?'<button class="qback" id="qBack">← Volver</button>':'<a class="qback" href="'+Z.info+'">📖 Prefiero leer la guía</a>')+'<span></span></div></div></div></div>');
+  document.querySelectorAll('.qo').forEach(b=>b.onclick=()=>{qzState.a[P.k]=b.dataset.v;b.classList.add('on');setTimeout(()=>{qzState.i++;renderQuiz();},180);});
+  const bk=$('#qBack');if(bk)bk.onclick=()=>{qzState.i--;renderQuiz();};
+}
+function qScore(p,kws){const n=norm(p.n);let sc=0;kws.forEach((k,i)=>{if(n.includes(k))sc+=10-Math.min(i,6);});return sc;}
+function qPick(list,kws,n){
+  const sc=list.filter(avail).map(p=>({p,s:qScore(p,kws)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||priceOf(a.p)-priceOf(b.p));
+  const out=[],subs={};for(const x of sc){if(out.length>=n)break;const k=x.p.sub||'';if((subs[k]||0)>=2&&sc.length>n)continue;subs[k]=(subs[k]||0)+1;out.push(x.p);}
+  if(out.length<n)for(const x of sc){if(out.length>=n)break;if(!out.includes(x.p))out.push(x.p);}
+  return out;
+}
+function quizItems(){
+  const A=qzState.a, id=qzState.id, items=[];
+  if(id==='sah'){
+    const kws=QK.sah[A.int], n=+A.cant;
+    let pool=ALL.filter(p=>['Sagrada Madre','Aromanza'].includes(p.top));
+    if(A.fmt!=='todo'){const f=pool.filter(p=>QFMT[A.fmt].includes(p.sub));if(qPick(f,kws,1).length)pool=f;}
+    let main=qPick(pool,kws,n);
+    if(main.length<n)main=main.concat(qPick(ALL.filter(p=>['Sagrada Madre','Aromanza'].includes(p.top)&&!main.includes(p)),kws,n-main.length));
+    if(main.length<n)main=main.concat(ALL.filter(p=>['Sagrada Madre','Aromanza'].includes(p.top)&&avail(p)&&!main.includes(p)).slice(0,n-main.length));
+    main.forEach((p,i)=>items.push({p,why:i===0?'Nuestra recomendación principal':'Complementa tu intención',tag:p.sub}));
+    if(A.porta==='no'){const names=QPORTA[A.fmt]||QPORTA.todo;const pt=names.map(nm=>ALL.find(p=>avail(p)&&norm(p.n)===nm||avail(p)&&norm(p.n).includes(nm))).find(Boolean);if(pt)items.push({p:pt,why:'Para quemarlos de forma segura',tag:'Accesorio'});}
+    if(n>=5){const st=ALL.find(p=>p.top==='Piedras'&&avail(p)&&norm(p.n).includes(QSTONE[A.int]));if(st)items.push({p:st,why:'Piedra afín a tu intención'+(qMean(st)?' · '+qMean(st):''),tag:'Piedra'});}
+  } else {
+    const kws=QK.pie[A.int];let pool=ALL.filter(p=>p.top==='Piedras');
+    const T={dije:['Dijes','Joyeria'],acc:['Pulseras','Aros','Anillos','Cadenas'],piedra:['Bruto','Roladas','']};
+    if(A.tipo!=='todo'){const f=pool.filter(p=>T[A.tipo].includes(p.sub||''));if(qPick(f,kws,1).length)pool=f;else qzState.fallback=true;}
+    let main=qPick(pool,kws,4);
+    if(main.length<2)main=main.concat(qPick(ALL.filter(p=>p.top==='Piedras'&&!main.includes(p)),kws,4-main.length));
+    main.forEach((p,i)=>items.push({p,why:(i===0?'⭐ La que más va con vos · ':'')+(qMean(p)||'Otra opción para vos'),tag:p.sub||'Piedra'}));
+  }
+  return items;
+}
+function renderQuizResult(){
+  qzState.fallback=false;const Z=QZ[qzState.id], A=qzState.a, items=quizItems(), id=qzState.id;
+  const intO=Z.pasos[0].o.find(o=>o[0]===A.int);
+  const txt=(id==='pie'?(QTXT_P[A.int]||QTXT[A.int]):QTXT[A.int])||'';
+  const sel=items.map(()=>true);
+  const draw=()=>{
+    const tot=items.reduce((s,it,i)=>s+(sel[i]?priceOf(it.p):0),0), cnt=sel.filter(Boolean).length;
+    setApp('<div class="wrap"><div class="qz qres"><div class="qbar"><i style="width:100%"></i></div>'+
+      '<div class="qq"><div class="rh"><div class="ic">'+intO[1]+'</div><h2>'+(id==='sah'?'Tu kit para '+intO[2].toLowerCase():'Tus piedras para '+intO[2].toLowerCase())+'</h2><p>'+txt+'</p>'+(qzState.fallback?'<p style="margin-top:6px;font-size:12.5px;color:var(--muted)">No tenemos esa intención en el formato que elegiste, así que te mostramos las mejores opciones de toda la sección.</p>':'')+'</div>'+
+      (items.length?items.map((it,i)=>'<label class="ritem'+(sel[i]?'':' off')+'"><input type="checkbox" data-i="'+i+'"'+(sel[i]?' checked':'')+'><div class="thumb" style="'+imgStyle(it.p)+'"></div><div class="rt"><a href="#/p/'+it.p.id+'">'+esc(it.p.n)+'</a><small>'+esc(it.why)+'</small><span class="tag">'+esc(it.tag||it.p.top)+'</span></div><div class="rp">'+money(priceOf(it.p))+'</div></label>').join(''):'<div class="empty">No encontramos productos disponibles para esa combinación. Probá con otra opción o escribinos por WhatsApp.</div>')+
+      (id==='pie'&&A.para==='regalo'?'<div class="rtip">🎁 <b>¿Es un regalo?</b> '+(META.regalo&&META.regalo.activo?'En el checkout podés pedir que lo envolvamos con una tarjeta con tu mensaje.':'Contale el significado de la piedra a quien la recibe: ¡es parte del regalo!')+'</div>':'')+
+      (id==='sah'?'<div class="rtip">💡 Abrí una ventana mientras sahumás y nunca lo dejes encendido sin supervisión.</div>':'')+
+      (items.length?'<div class="rtot"><div><small style="color:var(--muted)">'+cnt+' producto'+(cnt===1?'':'s')+' seleccionado'+(cnt===1?'':'s')+'</small><br><b>'+money(tot)+'</b></div><button class="btn pri" id="qAdd"'+(cnt?'':' disabled')+'>🛒 Agregar '+(cnt>1?'todo ':'')+'al carrito</button></div>':'')+
+      '<div class="qnav"><button class="qback" id="qRe">↺ Volver a empezar</button><a class="qback" href="'+Z.info+'">📖 Ver la guía completa</a></div></div></div></div>');
+    document.querySelectorAll('.ritem input').forEach(c=>c.onchange=()=>{sel[+c.dataset.i]=c.checked;draw();});
+    $('#qRe').onclick=()=>startQuiz(id);
+    const ad=$('#qAdd');if(ad)ad.onclick=()=>{items.forEach((it,i)=>{if(sel[i]&&!cart[it.p.id])cart[it.p.id]=1;});saveLS(CART_KEY,cart);updateCount();renderCart();openCart(true);toast('🌿 Agregamos tu selección al carrito');};
+  };
+  draw();
 }
 
 /* ============ guías ============ */
