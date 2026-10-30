@@ -49,6 +49,16 @@ nav.cats a:hover,nav.cats a.on{color:var(--accent-d);border-bottom-color:var(--g
 .hero h1{font-family:Lora,serif;font-size:40px;line-height:1.05;margin:0 0 12px;color:var(--accent-d);font-weight:600}
 .hero p{color:var(--accent);margin:0 0 22px;font-size:16px;line-height:1.55;max-width:520px}
 .hero .logo{flex:none;width:260px;background:#fff;border-radius:22px;padding:22px;box-shadow:0 12px 40px rgba(95,80,67,.15)}
+.hero .col{flex:none;display:grid;grid-template-columns:1fr 1fr;gap:12px;width:400px}
+.hero .col a{aspect-ratio:1;border-radius:18px;background:#fff center/cover no-repeat;box-shadow:0 10px 30px rgba(95,80,67,.18);border:4px solid #fff;transition:.2s}
+.hero .col a:nth-child(1){transform:rotate(-3deg)}.hero .col a:nth-child(2){transform:translateY(18px) rotate(2deg)}.hero .col a:nth-child(3){transform:translateY(-6px) rotate(2deg)}.hero .col a:nth-child(4){transform:translateY(12px) rotate(-2deg)}
+.hero .col a:hover{transform:scale(1.04)}
+.hero .kick{display:inline-block;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--sage-d);font-weight:600;margin-bottom:10px}
+.grid.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.badge.tag{background:var(--accent-d)}
+.badge.tag.nuevo{background:var(--sage)}
+.badge.tag.top{background:#c9822b}
+.card .cuotas{font-size:11.5px;color:var(--muted);margin-top:-2px}
 .hero .logo img{width:100%;display:block}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:11px;padding:13px 22px;font-weight:600;font-size:15px;cursor:pointer;transition:.15s}
 .btn.pri{background:var(--accent-d);color:#fff}.btn.pri:hover{background:#4c4036}
@@ -318,12 +328,13 @@ footer .legal{border-top:1px solid #57493f;text-align:center;font-size:12px;colo
  .tiles{grid-template-columns:repeat(3,1fr)}
  .pp,.co{grid-template-columns:minmax(0,1fr);gap:20px}
  .summary{position:static}
- .hero .logo{display:none}
+ .hero .logo,.hero .col{display:none}
  .hero h1{font-size:31px}
  footer .wrap{grid-template-columns:1fr}
  .perks{grid-template-columns:1fr}
 }
 @media (max-width:640px){
+ .grid.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
  .hrow{height:auto;flex-wrap:wrap;padding:10px 16px;gap:10px}
  .brand span{display:none}
  .search{order:3;flex-basis:100%;max-width:none}
@@ -454,13 +465,16 @@ function pct(p){return p.of&&p.p>p.of?Math.round((1-p.of/p.p)*100):0;}
 function maxQty(p){if(!p.stock)return 0;const s=STOCK[p.id];return s==null?99:Math.max(0,s);}
 function avail(p){return maxQty(p)>0;}
 function priceHtml(p){return p.of?'<span class="old">'+money(p.p)+'</span>'+money(p.of):money(p.p);}
+let NEWSET=null;
+function tagOf(p){if(p.tag)return p.tag;if(!NEWSET){NEWSET=new Set(ALL.filter(x=>/^\d+$/.test(x.id)&&avail(x)).sort((a,b)=>b.id-a.id).slice(0,24).map(x=>x.id));}return NEWSET.has(p.id)?'Nuevo':'';}
+function tagCls(t){t=norm(t);return t.includes('nuevo')?'nuevo':(t.includes('vendido')||t.includes('top'))?'top':'';}
 function card(p){
   const a=avail(p), s=STOCK[p.id];
   return '<div class="card'+(a?'':' nostock')+'">'+
-    (a?'':'<span class="badge sin">Sin stock</span>')+(a&&s!=null&&s<=3?'<span class="badge few">¡Últimas '+s+'!</span>':'')+(p.of?'<span class="badge pct">-'+pct(p)+'%</span>':'')+
+    (a?'':'<span class="badge sin">Sin stock</span>')+(a&&s!=null&&s<=3?'<span class="badge few">¡Últimas '+s+'!</span>':'')+(p.of?'<span class="badge pct">-'+pct(p)+'%</span>':'')+(a&&!(s!=null&&s<=3)&&tagOf(p)?'<span class="badge tag '+tagCls(tagOf(p))+'">'+esc(tagOf(p))+'</span>':'')+
     '<div class="imgwrap"><a class="imgbox" href="#/p/'+p.id+'" style="'+imgStyle(p)+'" aria-label="'+esc(p.n)+'"></a>'+favIcon(p.id)+'</div>'+
     '<div class="body"><div class="cat">'+esc(p.sub||p.top)+'</div><a class="name" href="#/p/'+p.id+'">'+esc(p.n)+'</a>'+
-    '<div class="price">'+priceHtml(p)+'</div>'+
+    '<div class="price">'+priceHtml(p)+'</div><div class="cuotas">💳 Cuotas con Mercado Pago</div>'+
     (a?'<button class="add" data-add="'+p.id+'">Agregar al carrito</button>':'<button class="add" disabled>Sin stock</button>')+
     '</div></div>';
 }
@@ -494,21 +508,27 @@ function setApp(html){$('#app').innerHTML=html;window.scrollTo({top:0,behavior:'
 function viewHome(){
   if($('#q').value)$('#q').value='';
   const ts=tops();
-  const destacados=pickFeatured(10);setTitle('');
-  const H=META.hero||{};
-  const vistos=seen.map(id=>BYID.get(id)).filter(Boolean).slice(0,6);
+  setTitle('');const H=META.hero||{};
+  const shown=new Set();const take=(arr,n)=>{const o=[];for(const p of arr){if(o.length>=n)break;if(!shown.has(p.id)&&avail(p)){o.push(p);shown.add(p.id);}}return o;};
+  const ofertas=take(ALL.filter(p=>p.of),4);
+  const destacados=take(pickFeatured(30).filter(p=>!p.of&&!tagOf(p)),8);
+  const nuevos=take(ALL.filter(p=>tagOf(p)).sort((a,b)=>(tagCls(tagOf(b))==='top')-(tagCls(tagOf(a))==='top')),4);
+  const filas=ts.slice(0,3).map(t=>[t,take(ALL.filter(p=>p.top===t),4)]);
+  const vistos=take(seen.map(id=>BYID.get(id)).filter(Boolean),4);
+  const colPics=(()=>{const pick=[];const tops=['Sagrada Madre','Piedras','Fragancias Saphirus','Adornos y decoraciones','Aromanza'];for(const t of tops){const p=ALL.find(x=>x.top===t&&x.hd&&avail(x)&&!pick.includes(x));if(p)pick.push(p);if(pick.length>=4)break;}return pick;})();
   setApp(
-   '<section class="hero"><div class="wrap"><div><h1>'+(H.titulo?esc(H.titulo):'Transformá tu espacio,<br>elevá tus sentidos')+'</h1><p>'+esc(H.texto||((META.tagline||'')+'. Fragancias, sahumos, piedras y decoración para armonizar tu hogar.'))+'</p><a class="btn pri" href="#/c/todos">Ver todos los productos</a></div><div class="logo"><img src="logo.png" alt=""></div></div></section>'+
+   '<section class="hero"><div class="wrap"><div><span class="kick">🌿 Tienda holística</span><h1>'+(H.titulo?esc(H.titulo):'Transformá tu espacio,<br>elevá tus sentidos')+'</h1><p>'+esc(H.texto||'Sahumerios naturales, fragancias Saphirus, piedras y decoración elegidos para armonizar tu hogar. Comprá online y recibilo en tu casa.')+'</p><a class="btn pri" href="#/c/todos">Ver todos los productos</a></div>'+(colPics.length>=4?'<div class="col">'+colPics.map(p=>'<a href="#/p/'+p.id+'" style="background-image:url(\''+esc(hdSrc(p))+'\')" aria-label="'+esc(p.n)+'"></a>').join('')+'</div>':'<div class="logo"><img src="logo.png" alt=""></div>')+'</div></section>'+
    '<div class="wrap"><div class="perks"><div class="perk"><div class="ic">💳</div><div><b>Pagá con Mercado Pago</b><small>Tarjeta, débito o dinero en cuenta</small></div></div>'+
    '<div class="perk"><div class="ic">📦</div><div><b>Envíos a todo el país</b><small>'+(gratisDesde()?'Gratis desde '+money(gratisDesde()):'Moto en AMBA y Correo Argentino')+'</small></div></div>'+
    '<div class="perk"><div class="ic">🏠</div><div><b>Retiro sin cargo</b><small>Coordinamos día y horario</small></div></div></div>'+
    '<div class="guides"><a class="guide" href="#/guia/sahumerios"><div class="gi">🪔</div><div><b>Encontrá tu sahumerio ideal</b><small>Respondé 4 preguntas y te armamos un kit a medida, listo para comprar.</small></div><span class="go">→</span></a>'+
    '<a class="guide" href="#/guia/piedras"><div class="gi">💎</div><div><b>¿Qué piedra es para vos?</b><small>Contanos qué buscás y te recomendamos piedras y dijes con su significado.</small></div><span class="go">→</span></a></div>'+
    '<div class="sec-h"><h2>Categorías</h2></div><div class="tiles">'+ts.map(t=>{const list=ALL.filter(p=>p.top===t);const rep=list.find(p=>avail(p))||list[0];return '<a class="tile" href="#/c/'+slug(t)+'"><div class="ti" style="'+imgStyle(rep)+'"></div><div class="tn">'+esc(t)+'<small>'+list.length+' productos</small></div></a>';}).join('')+'</div>'+
-   (ALL.some(p=>p.of&&avail(p))?'<div class="sec-h"><h2>Ofertas</h2><a href="#/ofertas">Ver todas →</a></div><div class="grid">'+ALL.filter(p=>p.of&&avail(p)).slice(0,5).map(card).join('')+'</div>':'')+
-   '<div class="sec-h"><h2>Destacados</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid">'+destacados.filter(p=>!p.of).map(card).join('')+'</div>'+
-   (vistos.length?'<div class="recent"><div class="sec-h"><h2>Vistos recientemente</h2></div><div class="grid">'+vistos.map(card).join('')+'</div></div>':'')+
-   ts.slice(0,3).map(t=>{const l=ALL.filter(p=>p.top===t&&avail(p)).slice(0,5);if(!l.length)return'';return '<div class="sec-h"><h2>'+esc(t)+'</h2><a href="#/c/'+slug(t)+'">Ver todo →</a></div><div class="grid">'+l.map(card).join('')+'</div>';}).join('')+
+   (ofertas.length?'<div class="sec-h"><h2>Ofertas</h2><a href="#/ofertas">Ver todas →</a></div><div class="grid g4">'+ofertas.map(card).join('')+'</div>':'')+
+   '<div class="sec-h"><h2>Destacados</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid g4">'+destacados.map(card).join('')+'</div>'+
+   (nuevos.length>=4?'<div class="sec-h"><h2>Novedades</h2><a href="#/c/todos">Ver todo →</a></div><div class="grid g4">'+nuevos.map(card).join('')+'</div>':'')+
+   filas.map(([t,l])=>l.length<4?'':'<div class="sec-h"><h2>'+esc(t)+'</h2><a href="#/c/'+slug(t)+'">Ver todo →</a></div><div class="grid g4">'+l.map(card).join('')+'</div>').join('')+
+   (vistos.length>=2?'<div class="sec-h"><h2>Vistos recientemente</h2></div><div class="grid g4">'+vistos.map(card).join('')+'</div>':'')+
    '</div>');
   bindAdds($('#app'));
 }
