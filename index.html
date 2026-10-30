@@ -113,6 +113,8 @@ nav.cats a:hover,nav.cats a.on{color:var(--accent-d);border-bottom-color:var(--g
 .lb{position:fixed;inset:0;background:rgba(20,15,12,.92);z-index:200;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;touch-action:pinch-zoom}
 .lb img{max-width:94vw;max-height:88vh;object-fit:contain;transition:transform .2s;user-select:none;-webkit-user-drag:none}
 .lb.z{cursor:zoom-out}
+.lb.nz,.lb.nz img{cursor:default}
+.lb img{box-shadow:0 10px 40px rgba(0,0,0,.4);border-radius:6px;background:#fff}
 .lb .x{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.15);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:26px;cursor:pointer;z-index:2}
 .lb .cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#eee;font-size:14px;pointer-events:none}
 .ritem .rchg{background:none;border:1px solid var(--line);border-radius:20px;padding:5px 10px;font-size:12px;color:var(--accent);cursor:pointer;white-space:nowrap;margin-left:6px}
@@ -555,7 +557,7 @@ function viewProduct(id){
   const rel=ALL.filter(x=>x.id!==p.id&&x.top===p.top&&(x.sub===p.sub)&&avail(x)).slice(0,5);
   setTitle(p.n);seen=[p.id].concat(seen.filter(x=>x!==p.id)).slice(0,12);saveLS(SEEN_KEY,seen);
   const st=!a?'<span class="bad">● Sin stock</span>':s!=null&&s<=5?'<span class="warn">● ¡Quedan '+s+'!</span>':'<span class="ok">● En stock</span>';
-  setApp('<div class="wrap"><div class="pp"><div><div class="pimg">'+(p.of?'<span class="badge pct" style="right:auto;left:14px;top:14px">-'+pct(p)+'%</span>':'')+(hdSrc(p)?'<img class="hd" id="pImg" src="'+esc(hdSrc(p))+'" alt="'+esc(p.n)+'"><span class="zoomhint">🔍 Tocá para ampliar</span>':'<div class="imgbox" style="'+imgStyle(p)+'"></div>')+favIcon(p.id)+'</div>'+galHtml(p)+'</div><div>'+
+  setApp('<div class="wrap"><div class="pp"><div><div class="pimg">'+(p.of?'<span class="badge pct" style="right:auto;left:14px;top:14px">-'+pct(p)+'%</span>':'')+(hdSrc(p)?'<img class="hd" id="pImg" src="'+esc(hdSrc(p))+'" alt="'+esc(p.n)+'"><span class="zoomhint">🔍 Ver grande</span>':'<div class="imgbox" style="'+imgStyle(p)+'"></div>')+favIcon(p.id)+'</div>'+galHtml(p)+'</div><div>'+
     '<div class="crumbs"><a href="#/">Inicio</a> › <a href="#/c/'+slug(p.top)+'">'+esc(p.top)+'</a>'+(p.sub?' › <a href="#/c/'+slug(p.top)+'/'+slug(p.sub)+'">'+esc(p.sub)+'</a>':'')+'</div>'+
     '<h1>'+esc(p.n)+'</h1><div class="price">'+priceHtml(p)+'</div>'+(p.of?'<div class="note" style="color:var(--green);margin-top:4px">Ahorrás '+money(p.p-p.of)+'</div>':'')+'<div class="stockline">'+st+'</div>'+
     (a?'<div class="qtyrow"><div class="qty"><button id="qm">−</button><span id="qv">1</span><button id="qp">+</button></div><button class="btn sage" id="addP" style="flex:1;min-width:200px">Agregar al carrito</button></div><button class="btn pri block" id="buyP">Comprar ahora</button>':
@@ -764,13 +766,16 @@ function viewTrack(){setTitle('Seguí tu pedido');
 /* ============ visor de fotos ============ */
 function openLightbox(src,cap){
   const lb=document.createElement('div');lb.className='lb';
-  lb.innerHTML='<button class="x" aria-label="Cerrar">×</button><img src="'+esc(src)+'" alt=""><div class="cap">'+esc(cap||'')+' · tocá la foto para hacer zoom</div>';
+  lb.innerHTML='<button class="x" aria-label="Cerrar">×</button><img src="'+esc(src)+'" alt=""><div class="cap">'+esc(cap||'')+'</div>';
   document.body.appendChild(lb);document.body.style.overflow='hidden';
-  const im=lb.querySelector('img');let z=false;
-  const close=()=>{lb.remove();document.body.style.overflow='';document.removeEventListener('keydown',kd);};
+  const im=lb.querySelector('img');let z=false,zs=1;
+  // nunca agrandar la foto más que su tamaño real (así no se pixela)
+  const fit=()=>{if(!im.naturalWidth)return;const W=window.innerWidth*.94,H=window.innerHeight*.86;const k=Math.min(1,W/im.naturalWidth,H/im.naturalHeight);im.style.width=Math.round(im.naturalWidth*k)+'px';im.style.height=Math.round(im.naturalHeight*k)+'px';im.style.maxWidth='none';im.style.maxHeight='none';zs=Math.min(2.5,1/k);lb.classList.toggle('nz',zs<1.15);if(zs>=1.15)lb.querySelector('.cap').textContent=(cap||'')+' · tocá la foto para hacer zoom';};
+  if(im.complete)fit();else im.onload=fit;window.addEventListener('resize',fit);
+  const close=()=>{lb.remove();document.body.style.overflow='';document.removeEventListener('keydown',kd);window.removeEventListener('resize',fit);};
   const kd=e=>{if(e.key==='Escape')close();};document.addEventListener('keydown',kd);
   const origin=e=>{const r=im.getBoundingClientRect();const x=((e.clientX-r.left)/r.width*100),y=((e.clientY-r.top)/r.height*100);im.style.transformOrigin=Math.max(0,Math.min(100,x))+'% '+Math.max(0,Math.min(100,y))+'%';};
-  im.onclick=e=>{e.stopPropagation();z=!z;lb.classList.toggle('z',z);if(z)origin(e);im.style.transform=z?'scale(2.2)':'';};
+  im.onclick=e=>{e.stopPropagation();if(zs<1.15)return;z=!z;lb.classList.toggle('z',z);if(z)origin(e);im.style.transform=z?'scale('+zs+')':'';};
   im.onmousemove=e=>{if(z)origin(e);};
   lb.onclick=e=>{if(e.target===lb||e.target.classList.contains('x'))close();};
 }
