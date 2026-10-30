@@ -103,6 +103,28 @@ nav.cats a:hover,nav.cats a.on{color:var(--accent-d);border-bottom-color:var(--g
 .pp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;padding:26px 0 10px;align-items:start}
 .pp .pimg{background:#fff;border:1px solid var(--line);border-radius:18px;aspect-ratio:1;max-width:520px;width:100%;position:relative;overflow:hidden}
 .pp .pimg .imgbox{position:absolute;inset:0}
+.pp .pimg img.hd{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;cursor:zoom-in;background:#fff}
+.pp .pimg .zoomhint{position:absolute;left:12px;bottom:12px;background:rgba(255,255,255,.92);border-radius:20px;padding:6px 12px;font-size:12px;color:var(--accent-d);box-shadow:0 2px 8px rgba(0,0,0,.1);pointer-events:none}
+.lb{position:fixed;inset:0;background:rgba(20,15,12,.92);z-index:200;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:zoom-in;touch-action:pinch-zoom}
+.lb img{max-width:94vw;max-height:88vh;object-fit:contain;transition:transform .2s;user-select:none;-webkit-user-drag:none}
+.lb.z{cursor:zoom-out}
+.lb .x{position:absolute;top:14px;right:16px;background:rgba(255,255,255,.15);color:#fff;border:none;width:44px;height:44px;border-radius:50%;font-size:26px;cursor:pointer;z-index:2}
+.lb .cap{position:absolute;bottom:16px;left:0;right:0;text-align:center;color:#eee;font-size:14px;pointer-events:none}
+.ritem .rchg{background:none;border:1px solid var(--line);border-radius:20px;padding:5px 10px;font-size:12px;color:var(--accent);cursor:pointer;white-space:nowrap;margin-left:6px}
+.ritem .rchg:hover{border-color:var(--gold)}
+.ralts{margin:-4px 0 12px 34px;background:#faf6f0;border:1px dashed var(--line);border-radius:12px;padding:10px}
+.ralts p{margin:0 0 8px;font-size:12.5px;color:var(--muted)}
+.ralts .ag{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.ralt{display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:10px;padding:6px;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.ralt:hover{border-color:var(--accent-d)}
+.ralt .thumb{width:44px;height:44px;border-radius:8px}
+.ralt span{font-size:12px;line-height:1.3;flex:1}
+.ralt b{display:block;font-size:12px;color:var(--accent-d)}
+.qres .qq{animation:none}
+.qmore{margin-top:16px}
+.qmore .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.qacts{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+@media(max-width:640px){.ralts{margin-left:0}.ritem{flex-wrap:wrap}.ritem .rt{flex-basis:calc(100% - 120px)}}
 .pp h1{font-family:Lora,serif;font-size:32px;line-height:1.1;margin:4px 0 12px;color:var(--accent-d);font-weight:600}
 .pp .price{font-size:30px}
 .pp .stockline{font-size:13.5px;margin:10px 0 20px}
@@ -417,7 +439,8 @@ function tops(){const by=new Set(ALL.map(p=>p.top));const o=(META.topsOrder||[])
 
 /* ============ productos ============ */
 function sprite(ix){const M=META.sprite;const s=Math.floor(ix/M.per),li=ix%M.per,c=li%M.cols,r=Math.floor(li/M.cols);return "background-image:url('sprite_"+s+".jpg');background-size:"+(M.cols*100)+"% "+(M.rows*100)+"%;background-position:"+(c/(M.cols-1)*100).toFixed(4)+"% "+(r/(M.rows-1)*100).toFixed(4)+"%;background-repeat:no-repeat";}
-function imgStyle(p){if(!p)return'';if(p.img)return "background-image:url('"+p.img+"');background-size:cover;background-position:center;background-repeat:no-repeat";if(p.ix!=null)return sprite(p.ix);return '';}
+function hdSrc(p){if(!p)return null;if(p.img)return p.img;if(p.hd)return (META.hdBase||'https://d22fxaf9t8d39k.cloudfront.net/')+p.hd;return null;}
+function imgStyle(p){if(!p)return'';if(!p.img&&p.hd)return "background-image:url('"+hdSrc(p)+"');background-size:cover;background-position:center;background-repeat:no-repeat;background-color:#fff";if(p.img)return "background-image:url('"+p.img+"');background-size:cover;background-position:center;background-repeat:no-repeat";if(p.ix!=null)return sprite(p.ix);return '';}
 function priceOf(p){return p.of||p.p;}
 function pct(p){return p.of&&p.p>p.of?Math.round((1-p.of/p.p)*100):0;}
 function maxQty(p){if(!p.stock)return 0;const s=STOCK[p.id];return s==null?99:Math.max(0,s);}
@@ -526,7 +549,7 @@ function viewProduct(id){
   const rel=ALL.filter(x=>x.id!==p.id&&x.top===p.top&&(x.sub===p.sub)&&avail(x)).slice(0,5);
   setTitle(p.n);seen=[p.id].concat(seen.filter(x=>x!==p.id)).slice(0,12);saveLS(SEEN_KEY,seen);
   const st=!a?'<span class="bad">● Sin stock</span>':s!=null&&s<=5?'<span class="warn">● ¡Quedan '+s+'!</span>':'<span class="ok">● En stock</span>';
-  setApp('<div class="wrap"><div class="pp"><div class="pimg">'+(p.of?'<span class="badge pct" style="right:auto;left:14px;top:14px">-'+pct(p)+'%</span>':'')+'<div class="imgbox" style="'+imgStyle(p)+'"></div>'+favIcon(p.id)+'</div><div>'+
+  setApp('<div class="wrap"><div class="pp"><div class="pimg">'+(p.of?'<span class="badge pct" style="right:auto;left:14px;top:14px">-'+pct(p)+'%</span>':'')+(hdSrc(p)?'<img class="hd" id="pImg" src="'+esc(hdSrc(p))+'" alt="'+esc(p.n)+'"><span class="zoomhint">🔍 Tocá para ampliar</span>':'<div class="imgbox" style="'+imgStyle(p)+'"></div>')+favIcon(p.id)+'</div><div>'+
     '<div class="crumbs"><a href="#/">Inicio</a> › <a href="#/c/'+slug(p.top)+'">'+esc(p.top)+'</a>'+(p.sub?' › <a href="#/c/'+slug(p.top)+'/'+slug(p.sub)+'">'+esc(p.sub)+'</a>':'')+'</div>'+
     '<h1>'+esc(p.n)+'</h1><div class="price">'+priceHtml(p)+'</div>'+(p.of?'<div class="note" style="color:var(--green);margin-top:4px">Ahorrás '+money(p.p-p.of)+'</div>':'')+'<div class="stockline">'+st+'</div>'+
     (a?'<div class="qtyrow"><div class="qty"><button id="qm">−</button><span id="qv">1</span><button id="qp">+</button></div><button class="btn sage" id="addP" style="flex:1;min-width:200px">Agregar al carrito</button></div><button class="btn pri block" id="buyP">Comprar ahora</button>':
@@ -542,6 +565,7 @@ function viewProduct(id){
     $('#addP').onclick=()=>addToCart(p.id,q);
     $('#buyP').onclick=()=>{addToCart(p.id,q,true);location.hash='#/checkout';};
   }
+  const pi=$('#pImg');if(pi)pi.onclick=()=>openLightbox(hdSrc(p),p.n);
   $('#shareBtn').onclick=async()=>{const url=location.href.split('#')[0]+'#/p/'+p.id;try{if(navigator.share){await navigator.share({title:p.n,text:p.n+' — '+money(priceOf(p)),url});return;}}catch(e){return;}try{await navigator.clipboard.writeText(url);toast('Link copiado 📋');}catch(e){prompt('Copiá el link:',url);}};
   const cpSaved=loadLS(CUST_KEY,{}).cp;if(cpSaved)$('#cpIn').value=cpSaved;
   $('#cpBtn').onclick=()=>quoteInto($('#cpIn').value,[{id:p.id,q:1}],$('#cpRes'));
@@ -730,6 +754,20 @@ function viewTrack(){setTitle('Seguí tu pedido');
   $('#trGo').onclick=go;$('#f_tmail').addEventListener('keydown',e=>{if(e.key==='Enter')go();});
 }
 
+/* ============ visor de fotos ============ */
+function openLightbox(src,cap){
+  const lb=document.createElement('div');lb.className='lb';
+  lb.innerHTML='<button class="x" aria-label="Cerrar">×</button><img src="'+esc(src)+'" alt=""><div class="cap">'+esc(cap||'')+' · tocá la foto para hacer zoom</div>';
+  document.body.appendChild(lb);document.body.style.overflow='hidden';
+  const im=lb.querySelector('img');let z=false;
+  const close=()=>{lb.remove();document.body.style.overflow='';document.removeEventListener('keydown',kd);};
+  const kd=e=>{if(e.key==='Escape')close();};document.addEventListener('keydown',kd);
+  const origin=e=>{const r=im.getBoundingClientRect();const x=((e.clientX-r.left)/r.width*100),y=((e.clientY-r.top)/r.height*100);im.style.transformOrigin=Math.max(0,Math.min(100,x))+'% '+Math.max(0,Math.min(100,y))+'%';};
+  im.onclick=e=>{e.stopPropagation();z=!z;lb.classList.toggle('z',z);if(z)origin(e);im.style.transform=z?'scale(2.2)':'';};
+  im.onmousemove=e=>{if(z)origin(e);};
+  lb.onclick=e=>{if(e.target===lb||e.target.classList.contains('x'))close();};
+}
+
 /* ============ asistentes interactivos ============ */
 const QZ={
  sah:{titulo:'Encontrá tu sahumerio ideal',intro:'Respondé unas preguntas y te armamos un kit a tu medida.',info:'#/guia/sahumerios/info',
@@ -816,6 +854,14 @@ function qPick(list,kws,n){
   if(out.length<n)for(const x of sc){if(out.length>=n)break;if(!out.includes(x.p))out.push(x.p);}
   return out;
 }
+function qRank(list,kws){return list.filter(avail).map(p=>({p,s:qScore(p,kws)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||priceOf(a.p)-priceOf(b.p)).map(x=>x.p);}
+const QACC=['Porta sahumerios','Hornitos','Cascadas de humo','Porta palo santo'];
+function quizAlts(it){ // alternativas para reemplazar un ítem
+  const A=qzState.a, id=qzState.id;
+  if(it.kind==='porta')return ALL.filter(p=>avail(p)&&QACC.includes(p.sub));
+  if(it.kind==='piedra')return qRank(ALL.filter(p=>p.top==='Piedras'),QK.pie[{limpieza:'calma',calma:'calma',proteccion:'proteccion',abundancia:'abundancia',amor:'amor',meditacion:'espiritual'}[A.int]]||[]);
+  return qzState.all||[];
+}
 function quizItems(){
   const A=qzState.a, id=qzState.id, items=[];
   if(id==='sah'){
@@ -825,16 +871,19 @@ function quizItems(){
     let main=qPick(pool,kws,n);
     if(main.length<n)main=main.concat(qPick(ALL.filter(p=>['Sagrada Madre','Aromanza'].includes(p.top)&&!main.includes(p)),kws,n-main.length));
     if(main.length<n)main=main.concat(ALL.filter(p=>['Sagrada Madre','Aromanza'].includes(p.top)&&avail(p)&&!main.includes(p)).slice(0,n-main.length));
-    main.forEach((p,i)=>items.push({p,why:i===0?'Nuestra recomendación principal':'Complementa tu intención',tag:p.sub}));
-    if(A.porta==='no'){const names=QPORTA[A.fmt]||QPORTA.todo;const pt=names.map(nm=>ALL.find(p=>avail(p)&&norm(p.n)===nm||avail(p)&&norm(p.n).includes(nm))).find(Boolean);if(pt)items.push({p:pt,why:'Para quemarlos de forma segura',tag:'Accesorio'});}
-    if(n>=5){const st=ALL.find(p=>p.top==='Piedras'&&avail(p)&&norm(p.n).includes(QSTONE[A.int]));if(st)items.push({p:st,why:'Piedra afín a tu intención'+(qMean(st)?' · '+qMean(st):''),tag:'Piedra'});}
+    main.forEach((p,i)=>items.push({p,kind:'main',why:i===0?'Nuestra recomendación principal':'Complementa tu intención',tag:p.sub}));
+    const sahAll=ALL.filter(p=>['Sagrada Madre','Aromanza'].includes(p.top));const fm=A.fmt!=='todo'?QFMT[A.fmt]:null;
+    qzState.all=qRank(sahAll,kws).sort((a,b)=>fm?((fm.includes(b.sub)?1:0)-(fm.includes(a.sub)?1:0)):0);
+    if(A.porta==='no'){const names=QPORTA[A.fmt]||QPORTA.todo;const pt=names.map(nm=>ALL.find(p=>avail(p)&&norm(p.n)===nm||avail(p)&&norm(p.n).includes(nm))).find(Boolean);if(pt)items.push({p:pt,kind:'porta',why:'Para quemarlos de forma segura',tag:'Accesorio'});}
+    if(n>=5){const st=ALL.find(p=>p.top==='Piedras'&&avail(p)&&norm(p.n).includes(QSTONE[A.int]));if(st)items.push({p:st,kind:'piedra',why:'Piedra afín a tu intención'+(qMean(st)?' · '+qMean(st):''),tag:'Piedra'});}
   } else {
     const kws=QK.pie[A.int];let pool=ALL.filter(p=>p.top==='Piedras');
     const T={dije:['Dijes','Joyeria'],acc:['Pulseras','Aros','Anillos','Cadenas'],piedra:['Bruto','Roladas','']};
     if(A.tipo!=='todo'){const f=pool.filter(p=>T[A.tipo].includes(p.sub||''));if(qPick(f,kws,1).length)pool=f;else qzState.fallback=true;}
     let main=qPick(pool,kws,4);
     if(main.length<2)main=main.concat(qPick(ALL.filter(p=>p.top==='Piedras'&&!main.includes(p)),kws,4-main.length));
-    main.forEach((p,i)=>items.push({p,why:(i===0?'⭐ La que más va con vos · ':'')+(qMean(p)||'Otra opción para vos'),tag:p.sub||'Piedra'}));
+    main.forEach((p,i)=>items.push({p,kind:'main',why:(i===0?'⭐ La que más va con vos · ':'')+(qMean(p)||'Otra opción para vos'),tag:p.sub||'Piedra'}));
+    const T2=A.tipo!=='todo'?T[A.tipo]:null;qzState.all=qRank(ALL.filter(p=>p.top==='Piedras'),kws).sort((a,b)=>T2?((T2.includes(b.sub||'')?1:0)-(T2.includes(a.sub||'')?1:0)):0);
   }
   return items;
 }
@@ -842,16 +891,27 @@ function renderQuizResult(){
   qzState.fallback=false;const Z=QZ[qzState.id], A=qzState.a, items=quizItems(), id=qzState.id;
   const intO=Z.pasos[0].o.find(o=>o[0]===A.int);
   const txt=(id==='pie'?(QTXT_P[A.int]||QTXT[A.int]):QTXT[A.int])||'';
-  const sel=items.map(()=>true);
+  const sel=items.map(()=>true);let openAlt=-1, showMore=false;
   const draw=()=>{
+    const inKit=new Set(items.map(it=>it.p.id));
+    const altsFor=i=>quizAlts(items[i]).filter(p=>!inKit.has(p.id)).slice(0,8);
+    const more=(qzState.all||[]).filter(p=>!inKit.has(p.id));
     const tot=items.reduce((s,it,i)=>s+(sel[i]?priceOf(it.p):0),0), cnt=sel.filter(Boolean).length;
     setApp('<div class="wrap"><div class="qz qres"><div class="qbar"><i style="width:100%"></i></div>'+
       '<div class="qq"><div class="rh"><div class="ic">'+intO[1]+'</div><h2>'+(id==='sah'?'Tu kit para '+intO[2].toLowerCase():'Tus piedras para '+intO[2].toLowerCase())+'</h2><p>'+txt+'</p>'+(qzState.fallback?'<p style="margin-top:6px;font-size:12.5px;color:var(--muted)">No tenemos esa intención en el formato que elegiste, así que te mostramos las mejores opciones de toda la sección.</p>':'')+'</div>'+
-      (items.length?items.map((it,i)=>'<label class="ritem'+(sel[i]?'':' off')+'"><input type="checkbox" data-i="'+i+'"'+(sel[i]?' checked':'')+'><div class="thumb" style="'+imgStyle(it.p)+'"></div><div class="rt"><a href="#/p/'+it.p.id+'">'+esc(it.p.n)+'</a><small>'+esc(it.why)+'</small><span class="tag">'+esc(it.tag||it.p.top)+'</span></div><div class="rp">'+money(priceOf(it.p))+'</div></label>').join(''):'<div class="empty">No encontramos productos disponibles para esa combinación. Probá con otra opción o escribinos por WhatsApp.</div>')+
+      (items.length?items.map((it,i)=>{const al=altsFor(i);return '<label class="ritem'+(sel[i]?'':' off')+'"><input type="checkbox" data-i="'+i+'"'+(sel[i]?' checked':'')+'><div class="thumb" style="'+imgStyle(it.p)+'"></div><div class="rt"><a href="#/p/'+it.p.id+'">'+esc(it.p.n)+'</a><small>'+esc(it.why)+'</small><span class="tag">'+esc(it.tag||it.p.top)+'</span></div><div class="rp">'+money(priceOf(it.p))+'</div>'+(al.length?'<button class="rchg" data-chg="'+i+'">🔄 Cambiar</button>':'')+'</label>'+
+        (openAlt===i&&al.length?'<div class="ralts"><p>Elegí otra opción para reemplazarlo:</p><div class="ag">'+al.map(p=>'<button class="ralt" data-alt="'+p.id+'"><div class="thumb" style="'+imgStyle(p)+'"></div><span>'+esc(p.n)+'<b>'+money(priceOf(p))+'</b></span></button>').join('')+'</div></div>':'');}).join(''):'<div class="empty">No encontramos productos disponibles para esa combinación. Probá con otra opción o escribinos por WhatsApp.</div>')+
       (id==='pie'&&A.para==='regalo'?'<div class="rtip">🎁 <b>¿Es un regalo?</b> '+(META.regalo&&META.regalo.activo?'En el checkout podés pedir que lo envolvamos con una tarjeta con tu mensaje.':'Contale el significado de la piedra a quien la recibe: ¡es parte del regalo!')+'</div>':'')+
       (id==='sah'?'<div class="rtip">💡 Abrí una ventana mientras sahumás y nunca lo dejes encendido sin supervisión.</div>':'')+
       (items.length?'<div class="rtot"><div><small style="color:var(--muted)">'+cnt+' producto'+(cnt===1?'':'s')+' seleccionado'+(cnt===1?'':'s')+'</small><br><b>'+money(tot)+'</b></div><button class="btn pri" id="qAdd"'+(cnt?'':' disabled')+'>🛒 Agregar '+(cnt>1?'todo ':'')+'al carrito</button></div>':'')+
+      '<div class="qacts">'+(more.length?'<button class="btn ghost" id="qMore">'+(showMore?'Ocultar opciones':'👀 Ver más opciones ('+more.length+')')+'</button>':'')+'<button class="btn ghost" id="qEdit">✏️ Cambiar mis respuestas</button></div>'+
+      (showMore&&more.length?'<div class="qmore"><p class="note" style="text-align:center;margin:0 0 10px">Todo lo que va con tu elección. Sumalo al carrito o tocá ❤ para guardarlo.</p><div class="grid">'+more.map(card).join('')+'</div></div>':'')+
       '<div class="qnav"><button class="qback" id="qRe">↺ Volver a empezar</button><a class="qback" href="'+Z.info+'">📖 Ver la guía completa</a></div></div></div></div>');
+    document.querySelectorAll('[data-chg]').forEach(b=>b.onclick=e=>{e.preventDefault();e.stopPropagation();const i=+b.dataset.chg;openAlt=openAlt===i?-1:i;const y=window.scrollY;draw();window.scrollTo(0,y);});
+    document.querySelectorAll('[data-alt]').forEach(b=>b.onclick=()=>{const p=BYID.get(b.dataset.alt);items[openAlt]=Object.assign({},items[openAlt],{p,why:(items[openAlt].kind==='main'&&id==='pie'?(qMean(p)||'Elegida por vos'):'Elegida por vos'),tag:items[openAlt].kind==='porta'?'Accesorio':(p.sub||p.top)});sel[openAlt]=true;openAlt=-1;const y=window.scrollY;draw();window.scrollTo(0,y);toast('Listo, lo cambiamos');});
+    const qm=$('#qMore');if(qm)qm.onclick=()=>{showMore=!showMore;const y=window.scrollY;draw();window.scrollTo(0,y);};
+    $('#qEdit').onclick=()=>{qzState.i=0;renderQuiz();};
+    bindAdds($('#app'));
     document.querySelectorAll('.ritem input').forEach(c=>c.onchange=()=>{sel[+c.dataset.i]=c.checked;draw();});
     $('#qRe').onclick=()=>startQuiz(id);
     const ad=$('#qAdd');if(ad)ad.onclick=()=>{items.forEach((it,i)=>{if(sel[i]&&!cart[it.p.id])cart[it.p.id]=1;});saveLS(CART_KEY,cart);updateCount();renderCart();openCart(true);toast('🌿 Agregamos tu selección al carrito');};
